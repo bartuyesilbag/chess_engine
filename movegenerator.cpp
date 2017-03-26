@@ -29,7 +29,7 @@ void moveGenerator::findLegalMoves(int mode)
         b->boardSimulate(QPoint(pack.X,pack.Y),QPoint(pack.destX,pack.destY),_board);
         calculateBoard(_board);
     }
-    b->slot_msg_to_board(QPoint(1,3),QPoint(2,3),"from ai");
+    b->slot_msg_to_board(QPoint(1,3),QPoint(2,3),"aaaa");
 }
 
 void moveGenerator::calculateBoard(char board[8][8])

@@ -32,6 +32,7 @@ private:
     void getBlackMoves(char pieceName, int x, int y);
     void getWhiteMoves(char pieceName, int x, int y);
     void show_board();
+    bool check(QPoint ex_p, QPoint new_p);
     int ex_x(std::__cxx11::string s);
     int ex_y(std::__cxx11::string s);
     int new_x(std::__cxx11::string s);

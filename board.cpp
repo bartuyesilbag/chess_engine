@@ -4,6 +4,7 @@
 #include "safelist.h"
 
 #include <iostream>
+#include <stdlib.h>
 
 #include <QDebug>
 #include <QVector>
@@ -66,16 +67,31 @@ void board::slot_msg_to_board(QPoint ex_p,QPoint new_p,std::string message)
         qDebug() << "Match Started Again!";
         emit signal_from_board(turn_counter);
     }
+    else if (message EQ "clear") {
+        system("clear");
+        emit signal_from_board(turn_counter);
+    }
+    else if(message.size() NE 4){
+        qDebug() << "Wrong Input! Please try again!";
+        emit signal_from_board(turn_counter);
+    }
     else{
         char c = chessBoard[ex_p.x()][ex_p.y()];
         if(chessBoard[ex_p.x()][ex_p.y()] NE piece_list[chess_pieces::Empty]){
-            chessBoard[ex_p.x()][ex_p.y()]   = piece_list[chess_pieces::Empty];
-            chessBoard[new_p.x()][new_p.y()] = c;
-            turn_counter++;
-            emit signal_from_board(turn_counter);
+            if(!check(ex_p,new_p)){
+                qDebug() << "This piece can't play like that! Please enter a new move!";
+                emit signal_from_board(turn_counter);
+            }
+            else{
+                chessBoard[ex_p.x()][ex_p.y()]   = piece_list[chess_pieces::Empty];
+                chessBoard[new_p.x()][new_p.y()] = c;
+                turn_counter++;
+                emit signal_from_board(turn_counter);
+            }
         }
         else{
-            qDebug() << "there is not a piece in ex_p, please enter a new move!";
+            qDebug() << "there is not a piece at there , please enter a new move!";
+            turn_counter++;
             emit signal_from_board(turn_counter);
         }
     }
@@ -127,7 +143,8 @@ void board::rook(int x, int y)
     }
 }
 
-void board::knight(int x, int y){
+void board::knight(int x, int y)
+{
     if(chessBoard[x+1][y+2] EQ piece_list[chess_pieces::Empty] && x+1 SM 7 && y+2 SM 7){
         //qDebug() << "Available Knight Move1!" << x+1 << y+2;
         pack.destX      = x+1   ;
@@ -187,7 +204,8 @@ void board::knight(int x, int y){
     //qDebug() << "knight end";
 }
 
-void board::bishop(int x, int y){
+void board::bishop(int x, int y)
+{
     //qDebug() << "bishop";
     int column = y;
     for(int line = x-1;line BG 0; line--){
@@ -240,7 +258,8 @@ void board::bishop(int x, int y){
     }
 }
 
-void board::queen(int x, int y){
+void board::queen(int x, int y)
+{
     //qDebug() << "queen";
     int column = y;
     for(int line = x-1;line BG 0; line--){
@@ -333,7 +352,8 @@ void board::queen(int x, int y){
     }
 }
 
-void board::king(int x, int y){
+void board::king(int x, int y)
+{
     //qDebug() << "king";
     if(chessBoard[x+1][y]   EQ piece_list[chess_pieces::Empty]){
         pack.destX      = x+1    ;
@@ -393,13 +413,19 @@ void board::king(int x, int y){
     }
 }
 
-void board::whitePawn(int x, int y){
+void board::whitePawn(int x, int y)
+{
     //qDebug() << "pawn";
     if(chessBoard[x-1][y] EQ piece_list[chess_pieces::Empty]){
         //qDebug() << "Available Pawn Move!" << x-1 << y  ;
         pack.destX      = x-1    ;
         pack.destY      = y      ;
         //pack.name       = c      ;
+        list->push(pack);
+    }
+    if(chessBoard[x-2][y] EQ piece_list[chess_pieces::Empty] AND turn_counter EQ 0){
+        pack.destX      = x-2    ;
+        pack.destY      = y      ;
         list->push(pack);
     }
     if(chessBoard[x-1][y+1] NE piece_list[chess_pieces::Empty]){
@@ -417,6 +443,11 @@ void board::blackPawn(int x, int y)
         pack.destX      = x+1    ;
         pack.destY      = y      ;
         //pack.name       = c      ;
+        list->push(pack);
+    }
+    if(chessBoard[x+2][y] EQ piece_list[chess_pieces::Empty] AND turn_counter EQ 1){
+        pack.destX      = x+2    ;
+        pack.destY      = y      ;
         list->push(pack);
     }
     if(chessBoard[x+1][y+1] NE piece_list[chess_pieces::Empty]){
@@ -551,6 +582,21 @@ void board::show_board()
                  << chessBoard[h][4] << chessBoard[h][5] << chessBoard[h][6] << chessBoard[h][7];
     }
     qDebug() << "\n    A" << "B" << "C" << "D" << "E" << "F" << "G" << "H";
+}
+
+bool board::check(QPoint ex_p, QPoint new_p)
+{
+    char c = chessBoard[ex_p.x()][ex_p.y()];
+    getMoves(c,ex_p.x(),ex_p.y());
+    int list_size = list->size();
+    for(int i = 0; i < list_size; i++){
+        list->pop(pack);
+        if(pack.destX EQ new_p.x() AND pack.destY EQ new_p.y()){
+            return true;
+        }
+    }
+    list->clearList();
+    return false;
 }
 
 
