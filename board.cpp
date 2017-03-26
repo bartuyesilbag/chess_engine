@@ -17,7 +17,6 @@ board::board(safelist<chess_pack> *_list, QObject *parent) : QObject(parent)
 
 }
 
-
 void board::setup_board()
 {
     for(int h = 0; h<8; h++){
@@ -64,6 +63,7 @@ void board::slot_msg_to_board(QPoint ex_p,QPoint new_p,std::string message)
     else if (message EQ "restart") {
         setup_board();
         turn_counter = 0;
+        qDebug() << "Match Started Again!";
         emit signal_from_board(turn_counter);
     }
     else{
@@ -76,7 +76,6 @@ void board::slot_msg_to_board(QPoint ex_p,QPoint new_p,std::string message)
         }
         else{
             qDebug() << "there is not a piece in ex_p, please enter a new move!";
-            turn_counter++;
             emit signal_from_board(turn_counter);
         }
     }
@@ -87,6 +86,7 @@ void board::rook(int x, int y)
     //qDebug() << "rook";
     for(int line=x-1;line BG 0;line--){
         if(chessBoard[line][y]   NE piece_list[chess_pieces::Empty]){
+
             break;
         }
         pack.destX      = line  ;
@@ -465,6 +465,18 @@ int board::getPiecesNumber()
         }
     }
     return size;
+}
+
+char board::boardSimulate(QPoint ex_p, QPoint new_p, char board[8][8])
+{
+    for(int h = 0; h<8; h++){
+        for(int w = 0 ; w<8; w++){
+            board[h][w] = chessBoard[h][w];
+        }
+    }
+    char c = board[ex_p.x()][ex_p.y()];
+    board[ex_p.x()][ex_p.y()]   = piece_list[chess_pieces::Empty];
+    board[new_p.x()][new_p.y()] = c;
 }
 
 void board::getMoves(char pieceName, int x, int y)

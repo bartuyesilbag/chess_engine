@@ -23,7 +23,7 @@ void communicationBus::test()
 
 int communicationBus::ex_x(std::__cxx11::string s)
 {
-    return (int)s.at(1) -'0';
+    return '8' - (int)s.at(1);
 }
 
 int communicationBus::ex_y(std::__cxx11::string s)
@@ -60,7 +60,7 @@ int communicationBus::ex_y(std::__cxx11::string s)
 
 int communicationBus::new_x(std::__cxx11::string s)
 {
-    return (int)s.at(3) -'0';
+    return '8' - (int)s.at(3);
 }
 
 int communicationBus::new_y(std::__cxx11::string s)
