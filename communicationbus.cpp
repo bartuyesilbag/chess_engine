@@ -18,11 +18,14 @@ void communicationBus::test()
 {
     std::string message;
     std::cin >> message;
-    emit signalFromComBus(QPoint(ex_x(message),ex_y(message)),QPoint(new_x(message),new_y(message)),message);
+    if(message.size() >= 4){
+        emit signalFromComBus(QPoint(ex_x(message),ex_y(message)),QPoint(new_x(message),new_y(message)),message);
+    }
 }
 
 int communicationBus::ex_x(std::__cxx11::string s)
 {
+
     return '8' - (int)s.at(1);
 }
 

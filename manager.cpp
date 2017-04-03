@@ -17,7 +17,7 @@ manager::manager(): QObject(NULL)
 
 manager::~manager()
 {
-    qDebug() << "manager deleted!";
+    qDebug() << "Game Over!";
 }
 
 void manager::start()

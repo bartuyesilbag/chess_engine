@@ -21,7 +21,7 @@ public:
     void king(int x, int y)     ;
     void getBoard(int mode)     ;
     int  getPiecesNumber()      ;
-    char boardSimulate(QPoint ex_p, QPoint new_p, char outStr[8][8]);
+    void boardSimulate(QPoint ex_p, QPoint new_p, char outStr[8][8]);
     void getMoves(char pieceName, int x, int y);
 private:
     void setup_board();

@@ -8,7 +8,7 @@ struct chess_pack{
     int destX;
     int destY;
     char name;
-
+    bool capture_the_flag = false;
 };
 
 #endif // PACK_H
