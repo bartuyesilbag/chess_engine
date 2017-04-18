@@ -16,14 +16,11 @@ moveGenerator::~moveGenerator()
     qDebug() << "moveGenerator deleted!";
 }
 
-
 void moveGenerator::findLegalMoves(int mode)
 {
     b->getBoard(mode);
     int list_size = list->size();
-    qDebug() << list_size;
     for(int i = 0; i < list_size; i++){
-        qDebug() << i;
         list->pop(pack);
         qDebug() << "pack.name:" << pack.name << "pack.x:" << pack.X << "pack.y:" << pack.Y
                  << "pack.destX:" << pack.destX << "pack.destY:" << pack.destY << i;
@@ -31,7 +28,7 @@ void moveGenerator::findLegalMoves(int mode)
         b->boardSimulate(QPoint(pack.X,pack.Y),QPoint(pack.destX,pack.destY),_board);
         calculateBoard(_board);
     }
-    b->slot_msg_to_board(QPoint(0,3),QPoint(1,3),"aaaa");
+    b->slot_msg_to_board(QPoint(0,1),QPoint(2,0),"aaaa");
 }
 
 void moveGenerator::calculateBoard(char board[8][8])
@@ -43,4 +40,5 @@ void moveGenerator::calculateBoard(char board[8][8])
     }
     qDebug() << "\n      A" << "B" << "C" << "D" << "E" << "F" << "G" << "H";
     qDebug() << "\n      0" << "1" << "2" << "3" << "4" << "5" << "6" << "7";
+    qDebug() << "--------------------------------------------------------------------";
 }

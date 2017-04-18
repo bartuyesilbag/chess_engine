@@ -23,6 +23,7 @@ public:
     int  getPiecesNumber()      ;
     void boardSimulate(QPoint ex_p, QPoint new_p, char outStr[8][8]);
     void getMoves(char pieceName, int x, int y);
+    void checkmate(QPoint ex_p, QPoint new_p);
 private:
     void setup_board();
     safelist<chess_pack> *list;
