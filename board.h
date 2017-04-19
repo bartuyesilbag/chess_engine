@@ -23,7 +23,8 @@ public:
     int  getPiecesNumber()      ;
     void boardSimulate(QPoint ex_p, QPoint new_p, char outStr[8][8]);
     void getMoves(char pieceName, int x, int y);
-    void checkmate(QPoint ex_p, QPoint new_p);
+    bool checkmate(int mode, char board[][8], QPoint ex_p = QPoint(10,10) , QPoint new_p = QPoint(10,10));
+    bool check_endgame();
 private:
     void setup_board();
     safelist<chess_pack> *list;
@@ -34,6 +35,7 @@ private:
     void getWhiteMoves(char pieceName, int x, int y);
     void show_board();
     bool check(QPoint ex_p, QPoint new_p);
+    QPoint getPiecePoint(char _board[][8], char piece);
     int ex_x(std::__cxx11::string s);
     int ex_y(std::__cxx11::string s);
     int new_x(std::__cxx11::string s);

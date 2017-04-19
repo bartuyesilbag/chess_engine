@@ -22,17 +22,17 @@ void moveGenerator::findLegalMoves(int mode)
     int list_size = list->size();
     for(int i = 0; i < list_size; i++){
         list->pop(pack);
-        qDebug() << "pack.name:" << pack.name << "pack.x:" << pack.X << "pack.y:" << pack.Y
-                 << "pack.destX:" << pack.destX << "pack.destY:" << pack.destY << i;
         char _board[8][8];
         b->boardSimulate(QPoint(pack.X,pack.Y),QPoint(pack.destX,pack.destY),_board);
         calculateBoard(_board);
     }
-    b->slot_msg_to_board(QPoint(0,1),QPoint(2,0),"aaaa");
+    b->slot_msg_to_board(QPoint(1,4),QPoint(2,5),"aaaa");
 }
 
 void moveGenerator::calculateBoard(char board[8][8])
 {
+    qDebug() << "pack.name:" << pack.name << "pack.x:" << pack.X << "pack.y:" << pack.Y
+             << "pack.destX:" << pack.destX << "pack.destY:" << pack.destY;
     qDebug() << "";
     for(int h = 0 ; h<8; h++){
         qDebug() << h << 8 - h << " " << board[h][0] << board[h][1] << board[h][2] << board[h][3]

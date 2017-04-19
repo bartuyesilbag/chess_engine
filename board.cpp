@@ -25,10 +25,16 @@ void board::setup_board()
             chessBoard[h][w] = piece_list[chess_pieces::Empty];
         }
     }
-    chessBoard[1][4]   = piece_list[chess_pieces::BlackKing];
-    chessBoard[2][6]   = piece_list[chess_pieces::WhiteQueen];
-    chessBoard[3][2]   = piece_list[chess_pieces::WhiteKnight];
-    chessBoard[6][6]   = piece_list[chess_pieces::WhitePawn];
+    chessBoard[realBoardHorizontal::seven][realBoardVertical::e]   = piece_list[chess_pieces::BlackKing  ];
+    chessBoard[realBoardHorizontal::six][realBoardVertical::f]   = piece_list[chess_pieces::WhiteQueen  ];
+    chessBoard[realBoardHorizontal::five][realBoardVertical::c]   = piece_list[chess_pieces::WhiteKnight  ];
+    chessBoard[realBoardHorizontal::two][realBoardVertical::h]   = piece_list[chess_pieces::WhitePawn  ];
+    //    chessBoard[realBoardHorizontal::seven][realBoardVertical::e]   = piece_list[chess_pieces::BlackKing  ];
+    //    //chessBoard[realBoardHorizontal::seven][realBoardVertical::h]   = piece_list[chess_pieces::WhiteRook  ];
+    //    chessBoard[realBoardHorizontal::five][realBoardVertical::c ]   = piece_list[chess_pieces::WhiteKnight];
+    //    chessBoard[realBoardHorizontal::six][realBoardVertical::g  ]   = piece_list[chess_pieces::WhiteQueen ];
+    //    chessBoard[realBoardHorizontal::two][realBoardVertical::g  ]   = piece_list[chess_pieces::WhitePawn  ];
+    //    chessBoard[realBoardHorizontal::seven][realBoardVertical::a]   = piece_list[chess_pieces::WhiteRook  ];
     //    for(int w = realBoardVertical::a; w SM realBoardVertical::h; w++){
     //        chessBoard[realBoardHorizontal::two][w] = piece_list[chess_pieces::WhitePawn];
     //    }
@@ -533,8 +539,8 @@ void board::king(int x, int y)
     QPoint ex_p(x,y);
     //qDebug() << "king";
     if(chessBoard[x+1][y]   EQ piece_list[chess_pieces::Empty] && x+1 SM 7){
-        checkmate(ex_p,QPoint(x+1,y));
-        if(pack.flag.check_mate_flag){
+        //checkmate(mode::black,ex_p,QPoint(x+1,y));
+        if(checkmate(mode::black,chessBoard,ex_p,QPoint(x+1,y))){
             pack.destX      = x+1    ;
             pack.destY      = y      ;
             //pack.name       = piece_list[chess_pieces::BlackKing];
@@ -547,11 +553,16 @@ void board::king(int x, int y)
         if(a > 6){
             //qDebug() << "Capturable Piece!king" << x+1 << y << piece_list[a];
             pack.flag.capture_the_flag = true;
+            pack.destX      = x+1    ;
+            pack.destY      = y      ;
+            //pack.name       = piece_list[chess_pieces::BlackKing];
+            list->push(pack);
         }
     }
     if(chessBoard[x-1][y]   EQ piece_list[chess_pieces::Empty] && x-1 BG 0){
-        checkmate(ex_p,QPoint(x-1,y));
-        if(pack.flag.check_mate_flag){
+        //checkmate(mode::black,ex_p,QPoint(x-1,y));
+        qDebug() << "test";
+        if(checkmate(mode::black,chessBoard,ex_p,QPoint(x-1,y))){
             pack.destX      = x-1    ;
             pack.destY      = y      ;
             //pack.name       = piece_list[chess_pieces::BlackKing];
@@ -564,12 +575,16 @@ void board::king(int x, int y)
         if(a > 6){
             //qDebug() << "Capturable Piece!king" << x-1 << y << piece_list[a];
             pack.flag.capture_the_flag = true;
+            pack.destX      = x-1    ;
+            pack.destY      = y      ;
+            //pack.name       = piece_list[chess_pieces::BlackKing];
+            list->push(pack);
         }
     }
     if(chessBoard[x+1][y+1] EQ piece_list[chess_pieces::Empty] && x+1 SM 7 && y+1 SM 7){
         //qDebug() << "Available King Move!" << x+1 << y+1<<2;
-        checkmate(ex_p,QPoint(x+1,y+1));
-        if(pack.flag.check_mate_flag){
+        //checkmate(mode::black, ex_p,QPoint(x+1,y+1));
+        if(checkmate(mode::black,chessBoard,ex_p,QPoint(x+1,y+1))){
             pack.destX      = x+1    ;
             pack.destY      = y+1    ;
             //pack.name       = piece_list[chess_pieces::BlackKing];
@@ -581,12 +596,16 @@ void board::king(int x, int y)
         if(a > 6){
             //qDebug() << "Capturable Piece!king" << x+1 << y+1 << piece_list[a];
             pack.flag.capture_the_flag = true;
+            pack.destX      = x+1    ;
+            pack.destY      = y+1    ;
+            //pack.name       = piece_list[chess_pieces::BlackKing];
+            list->push(pack);
         }
     }
     if(chessBoard[x+1][y-1] EQ piece_list[chess_pieces::Empty] && x+1 SM 7 && y-1 BG 0){
         //qDebug() << "Available King Move!" << x+1 << y-1<<3;
-        checkmate(ex_p,QPoint(x+1,y-1));
-        if(pack.flag.check_mate_flag){
+        //checkmate(mode::black, ex_p,QPoint(x+1,y-1));
+        if(checkmate(mode::black,chessBoard,ex_p,QPoint(x+1,y-1))){
             pack.destX      = x+1    ;
             pack.destY      = y-1    ;
             //pack.name       = piece_list[chess_pieces::BlackKing];
@@ -598,12 +617,16 @@ void board::king(int x, int y)
         if(a > 6){
             qDebug() << "Capturable Piece!king" << x+1 << y-1 << piece_list[a];
             pack.flag.capture_the_flag = true;
+            pack.destX      = x+1    ;
+            pack.destY      = y-1    ;
+            //pack.name       = piece_list[chess_pieces::BlackKing];
+            list->push(pack);
         }
     }
     if(chessBoard[x][y+1]   EQ piece_list[chess_pieces::Empty] && y+1 SM 7){
         //qDebug() << "Available King Move!" << x   << y+1<<4;
-        checkmate(ex_p,QPoint(x,y+1));
-        if(pack.flag.check_mate_flag){
+        //checkmate(mode::black, ex_p,QPoint(x,y+1));
+        if(checkmate(mode::black,chessBoard,ex_p,QPoint(x,y+1))){
             pack.destX      = x      ;
             pack.destY      = y+1    ;
             //pack.name       = piece_list[chess_pieces::BlackKing];
@@ -615,12 +638,16 @@ void board::king(int x, int y)
         if(a > 6){
             //qDebug() << "Capturable Piece!king" << x << y+1 << piece_list[a];
             pack.flag.capture_the_flag = true;
+            pack.destX      = x      ;
+            pack.destY      = y+1    ;
+            //pack.name       = piece_list[chess_pieces::BlackKing];
+            list->push(pack);
         }
     }
     if(chessBoard[x][y-1]   EQ piece_list[chess_pieces::Empty] && y-1 BG 0){
         //qDebug() << "Available King Move!" << x   << y-1<<5;
-        checkmate(ex_p,QPoint(x,y-1));
-        if(pack.flag.check_mate_flag){
+        //checkmate(mode::black, ex_p,QPoint(x,y-1));
+        if(checkmate(mode::black,chessBoard,ex_p,QPoint(x,y-1))){
             pack.destX      = x      ;
             pack.destY      = y-1    ;
             //pack.name       = piece_list[chess_pieces::BlackKing];
@@ -632,12 +659,16 @@ void board::king(int x, int y)
         if(a > 6){
             //qDebug() << "Capturable Piece!king" << x << y-1 << piece_list[a];
             pack.flag.capture_the_flag = true;
+            pack.destX      = x      ;
+            pack.destY      = y-1    ;
+            //pack.name       = piece_list[chess_pieces::BlackKing];
+            list->push(pack);
         }
     }
     if(chessBoard[x-1][y+1] EQ piece_list[chess_pieces::Empty] && x-1 BG 0 && y+1 SM 7){
         //qDebug() << "Available King Move!" << x-1 << y+1<<6;
-        checkmate(ex_p,QPoint(x-1,y+1));
-        if(pack.flag.check_mate_flag){
+        //checkmate(mode::black, ex_p,QPoint(x-1,y+1));
+        if(checkmate(mode::black,chessBoard,ex_p,QPoint(x-1,y+1))){
             pack.destX      = x-1    ;
             pack.destY      = y+1    ;
             //pack.name       = piece_list[chess_pieces::BlackKing];
@@ -649,12 +680,16 @@ void board::king(int x, int y)
         if(a > 6){
             //qDebug() << "Capturable Piece!king" << x-1 << y+1 << piece_list[a];
             pack.flag.capture_the_flag = true;
+            pack.destX      = x-1    ;
+            pack.destY      = y+1    ;
+            //pack.name       = piece_list[chess_pieces::BlackKing];
+            list->push(pack);
         }
     }
     if(chessBoard[x-1][y-1] EQ piece_list[chess_pieces::Empty] && x-1 BG 0 && y-1 BG 0){
         //qDebug() << "Available King Move!" << x-1 << y-1<<7;
-        checkmate(ex_p,QPoint(x-1,y-1));
-        if(pack.flag.check_mate_flag){
+        //checkmate(mode::black, ex_p,QPoint(x-1,y-1));
+        if(checkmate(mode::black,chessBoard,ex_p,QPoint(x-1,y-1))){
             pack.destX      = x-1    ;
             pack.destY      = y-1    ;
             //pack.name       = piece_list[chess_pieces::BlackKing];
@@ -666,6 +701,10 @@ void board::king(int x, int y)
         if(a > 6){
             //qDebug() << "Capturable Piece!king" << x-1 << y-1 << piece_list[a];
             pack.flag.capture_the_flag = true;
+            pack.destX      = x-1    ;
+            pack.destY      = y-1    ;
+            //pack.name       = piece_list[chess_pieces::BlackKing];
+            list->push(pack);
         }
     }
 }
@@ -763,7 +802,7 @@ void board::getBoard(int m)
     }
 }
 
-int board::getPiecesNumber()
+int  board::getPiecesNumber()
 {
     int size = 0;
     for(int h = 0; h<8; h++){
@@ -794,165 +833,307 @@ void board::getMoves(char pieceName, int x, int y)
     getWhiteMoves(pieceName,x,y);
 }
 
-void board::checkmate(QPoint ex_p, QPoint new_p)
+bool board::checkmate(int mode,  char board[8][8], QPoint ex_p, QPoint new_p)
 {
-    pack.flag.check_mate_flag = true;
     char _board[8][8];
     for(int h = 0; h<8; h++){
         for(int w = 0 ; w<8; w++){
-            _board[h][w] = chessBoard[h][w];
+            _board[h][w] = board[h][w];
         }
     }
-    _board[ex_p.x()][ex_p.y()]   = piece_list[chess_pieces::Empty];
-    _board[new_p.x()][new_p.y()] = piece_list[chess_pieces::BlackKing];
-
-
-    //    int column = ex_p.y();
-    //    for(int line = ex_p.x()-1;line BG 0; line--){
-    //        column = column - 1;
-    //        if(_board[line][column] NE piece_list[chess_pieces::Empty] || column < 0){
-    //            int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, _board[line][column]));
-    //            if(a > 6){
-    //                qDebug() << "test:" << line << column << piece_list[a];
-    //                pack.flag.capture_the_flag = true;
-
-    //            }
-    //            column = ex_p.y();
-    //            break;
-    //        }
-    //    }
-
-    if(new_p.x()+1 SM 7 && new_p.y()+2 SM 7){
-        if(_board[new_p.x()+1][new_p.y()+2]  EQ piece_list[chess_pieces::WhiteKnight]){
-            //qDebug() << "Capturable Piece!knight" << x+1 << y+2 << piece_list[a];
-            pack.flag.check_mate_flag = false;
+    if(ex_p EQ QPoint(10,10)){
+        if(mode EQ 1){
+            new_p = getPiecePoint(_board,'K');
+        }
+        else if (mode EQ 0) {
+            new_p = getPiecePoint(_board,'k');
         }
     }
-    if(new_p.x()+1 SM 7 && new_p.y()-2 BG 0){
-        if(_board[new_p.x()+1][new_p.y()-2]  EQ piece_list[chess_pieces::WhiteKnight]){
-            //qDebug() << "Capturable Piece!knight" << x+1 << y-2 << piece_list[a];
-            pack.flag.check_mate_flag = false;
-        }
-    }
-    if(new_p.x()-1 BG 0 && new_p.y()+2 SM 7){
-        if(_board[new_p.x()-1][new_p.y()+2]  EQ piece_list[chess_pieces::WhiteKnight]){
-            //qDebug() << "Capturable Piece!knight" << x-1 << y+2 << piece_list[a];
-            pack.flag.check_mate_flag = false;
-        }
-    }
-    if(new_p.x()-1 BG 0 && new_p.y()-2 BG 0){
-        if(_board[new_p.x()-1][new_p.y()-2]  EQ piece_list[chess_pieces::WhiteKnight]){
-            //qDebug() << "Capturable Piece!knight" << x-1 << y-2 << piece_list[a];
-            pack.flag.check_mate_flag = false;
-        }
-    }
-    if(new_p.x()+2 SM 7 && new_p.y()+1 SM 7){
-        if(_board[new_p.x()+2][new_p.y()+1]  EQ piece_list[chess_pieces::WhiteKnight]){
-            //qDebug() << "Capturable Piece!knight" << x+2 << y+1 << piece_list[a];
-            pack.flag.check_mate_flag = false;
-        }
-    }
-    if(new_p.x()+2 SM 7 && new_p.y()-1 BG 0){
-        if(_board[new_p.x()+2][new_p.y()-1]  EQ piece_list[chess_pieces::WhiteKnight]){
-
-            //qDebug() << "Capturable Piece!knight" << x+2 << y-1 << piece_list[a];
-            pack.flag.check_mate_flag = false;
-        }
-    }
-    if(new_p.x()-2 BG 0 && new_p.y()+1 SM 7){
-        if(_board[new_p.x()-2][new_p.y()+1]  EQ piece_list[chess_pieces::WhiteKnight]){
-            //qDebug() << "Capturable Piece!knight" << x-2 << y+1 << piece_list[a];
-            pack.flag.check_mate_flag = false;
-        }
-    }
-    if(new_p.x()-2 BG 0 && new_p.y()-1 BG 0){
-        if(_board[new_p.x()-2][new_p.y()-1]  EQ piece_list[chess_pieces::WhiteKnight]){
-            //qDebug() << "Capturable Piece!knight" << x-2 << y-1 << piece_list[a];
-            pack.flag.check_mate_flag = false;
-        }
+    else{
+        _board[ex_p.x()][ex_p.y()]   = piece_list[chess_pieces::Empty];
+        _board[new_p.x()][new_p.y()] = piece_list[chess_pieces::BlackKing];
     }
 
-    int column = new_p.y();
-    for(int line = new_p.x()-1;line BG 0; line--){
-        column = column - 1;
-        if(_board[line][column] NE piece_list[chess_pieces::Empty] || column < 0){
-            if(_board[line][column] EQ piece_list[chess_pieces::WhiteBishop] OR _board[line][column] EQ piece_list[chess_pieces::WhiteQueen]){
-                //qDebug() << line << column << _board[line][column];
-                //qDebug() << "Capturable Piece!queen" << line << column << piece_list[a];
-                pack.flag.check_mate_flag = false;
-            }
-            column = new_p.y();
-        }
-    }
-    for(int line = new_p.x()+1;line SM 7; line++){
-        column = column + 1;
-        if(_board[line][column] NE piece_list[chess_pieces::Empty] || column > 7){
-            if(_board[line][column] EQ piece_list[chess_pieces::WhiteBishop] OR _board[line][column] EQ piece_list[chess_pieces::WhiteQueen]){
-                //qDebug() << line << column << _board[line][column];
-                //qDebug() << "Capturable Piece!queen" << line << column << piece_list[a];
-                pack.flag.check_mate_flag = false;
-            }
-            column = new_p.y();
-        }
-    }
-    for(int line = new_p.x()+1;line SM 7; line++){
-        column = column - 1;
-        if(_board[line][column] NE piece_list[chess_pieces::Empty] || column < 0){
-            if(_board[line][column] EQ piece_list[chess_pieces::WhiteBishop] OR _board[line][column] EQ piece_list[chess_pieces::WhiteQueen]){
-                //qDebug() << line << column << _board[line][column];
-                //qDebug() << "Capturable Piece!queen" << line << column << piece_list[a];
-                pack.flag.check_mate_flag = false;
-            }
-            column = new_p.y();
-        }
-    }
-    for(int line = new_p.x()-1;line BG 0; line--){
-        column = column + 1;
-        if(_board[line][column] NE piece_list[chess_pieces::Empty] || column > 7){
-            if(_board[line][column] EQ piece_list[chess_pieces::WhiteBishop] OR _board[line][column] EQ piece_list[chess_pieces::WhiteQueen]){
-                //qDebug() << line << column << _board[line][column];
-                //qDebug() << "Capturable Piece!queen" << line << column << piece_list[a];
-                pack.flag.check_mate_flag = false;
-            }
-            column = new_p.y();
-        }
-    }
-    for(int line= new_p.x()-1;line BG 0;line--){
-        if(_board[line][new_p.y()]   NE piece_list[chess_pieces::Empty]){
-            if(_board[line][new_p.y()] EQ piece_list[chess_pieces::WhiteRook] OR _board[line][new_p.y()] EQ piece_list[chess_pieces::WhiteQueen]){
-                //qDebug() << line << new_p.y() << _board[line][new_p.y()];
-                //qDebug() << "Capturable Piece!queen" << line << y << piece_list[a];
-                pack.flag.check_mate_flag = false;
+    if(mode EQ 1){
+        if(new_p.x()+1 SM 7 && new_p.y()+2 SM 7){
+            if(_board[new_p.x()+1][new_p.y()+2]  EQ piece_list[chess_pieces::WhiteKnight]){
+                //qDebug() << "Capturable Piece!knight" << x+1 << y+2 << piece_list[a];
+                return false;
             }
         }
-    }
-    for(int line=new_p.x()+1;line SM 7;line++){
-        if(_board[line][new_p.y()]   NE piece_list[chess_pieces::Empty]){
-            if(_board[line][new_p.y()] EQ piece_list[chess_pieces::WhiteRook] OR _board[line][new_p.y()] EQ piece_list[chess_pieces::WhiteQueen]){
-                //qDebug() << line << new_p.y() << _board[line][new_p.y()];
-                //qDebug() << "Capturable Piece!queen" << line << y << piece_list[a];
-                pack.flag.check_mate_flag = false;
+        if(new_p.x()+1 SM 7 && new_p.y()-2 BG 0){
+            if(_board[new_p.x()+1][new_p.y()-2]  EQ piece_list[chess_pieces::WhiteKnight]){
+                //qDebug() << "Capturable Piece!knight" << x+1 << y-2 << piece_list[a];
+                return false;
+            }
+        }
+        if(new_p.x()-1 BG 0 && new_p.y()+2 SM 7){
+            if(_board[new_p.x()-1][new_p.y()+2]  EQ piece_list[chess_pieces::WhiteKnight]){
+                //qDebug() << "Capturable Piece!knight" << x-1 << y+2 << piece_list[a];
+                return false;
+            }
+        }
+        if(new_p.x()-1 BG 0 && new_p.y()-2 BG 0){
+            if(_board[new_p.x()-1][new_p.y()-2]  EQ piece_list[chess_pieces::WhiteKnight]){
+                //qDebug() << "Capturable Piece!knight" << x-1 << y-2 << piece_list[a];
+                return false;
+            }
+        }
+        if(new_p.x()+2 SM 7 && new_p.y()+1 SM 7){
+            if(_board[new_p.x()+2][new_p.y()+1]  EQ piece_list[chess_pieces::WhiteKnight]){
+                //qDebug() << "Capturable Piece!knight" << x+2 << y+1 << piece_list[a];
+                return false;
+            }
+        }
+        if(new_p.x()+2 SM 7 && new_p.y()-1 BG 0){
+            if(_board[new_p.x()+2][new_p.y()-1]  EQ piece_list[chess_pieces::WhiteKnight]){
+                //qDebug() << "Capturable Piece!knight" << x+2 << y-1 << piece_list[a];
+                return false;
+            }
+        }
+        if(new_p.x()-2 BG 0 && new_p.y()+1 SM 7){
+            if(_board[new_p.x()-2][new_p.y()+1]  EQ piece_list[chess_pieces::WhiteKnight]){
+                //qDebug() << "Capturable Piece!knight" << x-2 << y+1 << piece_list[a];
+                return false;
+            }
+        }
+        if(new_p.x()-2 BG 0 && new_p.y()-1 BG 0){
+            if(_board[new_p.x()-2][new_p.y()-1]  EQ piece_list[chess_pieces::WhiteKnight]){
+                //qDebug() << "Capturable Piece!knight" << x-2 << y-1 << piece_list[a];
+                return false;
+            }
+        }
+
+        int column = new_p.y();
+        for(int line = new_p.x()-1;line BG 0; line--){
+            column = column - 1;
+            if(_board[line][column] NE piece_list[chess_pieces::Empty] || column < 0){
+                if(_board[line][column] EQ piece_list[chess_pieces::WhiteBishop] OR _board[line][column] EQ piece_list[chess_pieces::WhiteQueen]){
+                    //qDebug() << line << column << _board[line][column];
+                    //qDebug() << "Capturable Piece!queen" << line << column << piece_list[a];
+                    return false;
+                }
+            }
+        }
+        column = new_p.y();
+        for(int line = new_p.x()+1;line SM 7; line++){
+            column = column + 1;
+            if(_board[line][column] NE piece_list[chess_pieces::Empty] || column > 7){
+                if(_board[line][column] EQ piece_list[chess_pieces::WhiteBishop] OR _board[line][column] EQ piece_list[chess_pieces::WhiteQueen]){
+                    //qDebug() << line << column << _board[line][column];
+                    //qDebug() << "Capturable Piece!queen" << line << column << piece_list[a];
+                    return false;
+                }
+            }
+        }
+        column = new_p.y();
+        for(int line = new_p.x()+1;line SM 7; line++){
+            column = column - 1;
+            if(_board[line][column] NE piece_list[chess_pieces::Empty] || column < 0){
+                if(_board[line][column] EQ piece_list[chess_pieces::WhiteBishop] OR _board[line][column] EQ piece_list[chess_pieces::WhiteQueen]){
+                    //qDebug() << line << column << _board[line][column];
+                    //qDebug() << "Capturable Piece!queen" << line << column << piece_list[a];
+                    return false;
+                }
+            }
+        }
+        column = new_p.y();
+        for(int line = new_p.x()-1;line BG 0; line--){
+            column = column + 1;
+            if(_board[line][column] NE piece_list[chess_pieces::Empty] || column > 7){
+                if(_board[line][column] EQ piece_list[chess_pieces::WhiteBishop] OR _board[line][column] EQ piece_list[chess_pieces::WhiteQueen]){
+                    //qDebug() << line << column << _board[line][column];
+                    //qDebug() << "Capturable Piece!queen" << line << column << piece_list[a];
+                    return false;
+                }
+            }
+        }
+        column = new_p.y();
+        for(int line= new_p.x()-1;line BG 0;line--){
+            if(_board[line][new_p.y()]   NE piece_list[chess_pieces::Empty]){
+                if(_board[line][new_p.y()] EQ piece_list[chess_pieces::WhiteRook] OR _board[line][new_p.y()] EQ piece_list[chess_pieces::WhiteQueen]){
+                    //qDebug() << line << new_p.y() << _board[line][new_p.y()];
+                    //qDebug() << "Capturable Piece!queen" << line << y << piece_list[a];
+                    return false;
+                }
+            }
+        }
+        for(int line=new_p.x()+1;line SM 7;line++){
+            if(_board[line][new_p.y()]   NE piece_list[chess_pieces::Empty]){
+                if(_board[line][new_p.y()] EQ piece_list[chess_pieces::WhiteRook] OR _board[line][new_p.y()] EQ piece_list[chess_pieces::WhiteQueen]){
+                    //qDebug() << line << new_p.y() << _board[line][new_p.y()];
+                    //qDebug() << "Capturable Piece!queen" << line << y << piece_list[a];
+                    return false;
+                }
+            }
+        }
+        for(int column=new_p.y()-1;column BG 0;column--){
+            if(_board[new_p.x()][column] NE piece_list[chess_pieces::Empty]){
+                if(_board[new_p.x()][column] EQ piece_list[chess_pieces::WhiteRook] OR _board[new_p.x()][column] EQ piece_list[chess_pieces::WhiteQueen]){
+                    //qDebug() << new_p.x() << column << _board[new_p.x()][column];
+                    //qDebug() << "Capturable Piece!queen" << x << column << piece_list[a];
+                    return false;
+                }
+            }
+        }
+        for(int column=new_p.y()+1;column SM 7;column++){
+            if(_board[new_p.x()][column] NE piece_list[chess_pieces::Empty]){
+                if(_board[new_p.x()][column] EQ piece_list[chess_pieces::WhiteRook] OR _board[new_p.x()][column] EQ piece_list[chess_pieces::WhiteQueen]){
+                    //qDebug() << new_p.x() << column << _board[new_p.x()][column];
+                    //qDebug() << "Capturable Piece!queen" << x << column << piece_list[a];
+                    return false;
+                }
             }
         }
     }
-    for(int column=new_p.y()-1;column BG 0;column--){
-        if(_board[new_p.x()][column] NE piece_list[chess_pieces::Empty]){
-            if(_board[new_p.x()][column] EQ piece_list[chess_pieces::WhiteRook] OR _board[new_p.x()][column] EQ piece_list[chess_pieces::WhiteQueen]){
-                //qDebug() << new_p.x() << column << _board[new_p.x()][column];
-                //qDebug() << "Capturable Piece!queen" << x << column << piece_list[a];
-                pack.flag.check_mate_flag = false;
+    else if (mode EQ 0) {
+        if(new_p.x()+1 SM 7 && new_p.y()+2 SM 7){
+            if(_board[new_p.x()+1][new_p.y()+2]  EQ piece_list[chess_pieces::BlackKnight]){
+                //qDebug() << "Capturable Piece!knight" << x+1 << y+2 << piece_list[a];
+                return false;
+            }
+        }
+        if(new_p.x()+1 SM 7 && new_p.y()-2 BG 0){
+            if(_board[new_p.x()+1][new_p.y()-2]  EQ piece_list[chess_pieces::BlackKnight]){
+                //qDebug() << "Capturable Piece!knight" << x+1 << y-2 << piece_list[a];
+                return false;
+            }
+        }
+        if(new_p.x()-1 BG 0 && new_p.y()+2 SM 7){
+            if(_board[new_p.x()-1][new_p.y()+2]  EQ piece_list[chess_pieces::BlackKnight]){
+                //qDebug() << "Capturable Piece!knight" << x-1 << y+2 << piece_list[a];
+                return false;
+            }
+        }
+        if(new_p.x()-1 BG 0 && new_p.y()-2 BG 0){
+            if(_board[new_p.x()-1][new_p.y()-2]  EQ piece_list[chess_pieces::BlackKnight]){
+                //qDebug() << "Capturable Piece!knight" << x-1 << y-2 << piece_list[a];
+                return false;
+            }
+        }
+        if(new_p.x()+2 SM 7 && new_p.y()+1 SM 7){
+            if(_board[new_p.x()+2][new_p.y()+1]  EQ piece_list[chess_pieces::BlackKnight]){
+                //qDebug() << "Capturable Piece!knight" << x+2 << y+1 << piece_list[a];
+                return false;
+            }
+        }
+        if(new_p.x()+2 SM 7 && new_p.y()-1 BG 0){
+            if(_board[new_p.x()+2][new_p.y()-1]  EQ piece_list[chess_pieces::BlackKnight]){
+
+                //qDebug() << "Capturable Piece!knight" << x+2 << y-1 << piece_list[a];
+                return false;
+            }
+        }
+        if(new_p.x()-2 BG 0 && new_p.y()+1 SM 7){
+            if(_board[new_p.x()-2][new_p.y()+1]  EQ piece_list[chess_pieces::BlackKnight]){
+                //qDebug() << "Capturable Piece!knight" << x-2 << y+1 << piece_list[a];
+                return false;
+            }
+        }
+        if(new_p.x()-2 BG 0 && new_p.y()-1 BG 0){
+            if(_board[new_p.x()-2][new_p.y()-1]  EQ piece_list[chess_pieces::BlackKnight]){
+                //qDebug() << "Capturable Piece!knight" << x-2 << y-1 << piece_list[a];
+                return false;
+            }
+        }
+
+        int column = new_p.y();
+        for(int line = new_p.x()-1;line BG 0; line--){
+            column = column - 1;
+            if(_board[line][column] NE piece_list[chess_pieces::Empty] || column < 0){
+                if(_board[line][column] EQ piece_list[chess_pieces::BlackBishop] OR _board[line][column] EQ piece_list[chess_pieces::BlackQueen]){
+                    //qDebug() << line << column << _board[line][column];
+                    //qDebug() << "Capturable Piece!queen" << line << column << piece_list[a];
+                    return false;
+                }
+            }
+        }
+        column = new_p.y();
+        for(int line = new_p.x()+1;line SM 7; line++){
+            column = column + 1;
+            if(_board[line][column] NE piece_list[chess_pieces::Empty] || column > 7){
+                if(_board[line][column] EQ piece_list[chess_pieces::BlackBishop] OR _board[line][column] EQ piece_list[chess_pieces::BlackQueen]){
+                    //qDebug() << line << column << _board[line][column];
+                    //qDebug() << "Capturable Piece!queen" << line << column << piece_list[a];
+                    return false;
+                }
+            }
+        }
+        column = new_p.y();
+        for(int line = new_p.x()+1;line SM 7; line++){
+            column = column - 1;
+            if(_board[line][column] NE piece_list[chess_pieces::Empty] || column < 0){
+                if(_board[line][column] EQ piece_list[chess_pieces::BlackBishop] OR _board[line][column] EQ piece_list[chess_pieces::BlackQueen]){
+                    //qDebug() << line << column << _board[line][column];
+                    //qDebug() << "Capturable Piece!queen" << line << column << piece_list[a];
+                    return false;
+                }
+            }
+        }
+        column = new_p.y();
+        for(int line = new_p.x()-1;line BG 0; line--){
+            column = column + 1;
+            if(_board[line][column] NE piece_list[chess_pieces::Empty] || column > 7){
+                if(_board[line][column] EQ piece_list[chess_pieces::BlackBishop] OR _board[line][column] EQ piece_list[chess_pieces::BlackQueen]){
+                    //qDebug() << line << column << _board[line][column];
+                    //qDebug() << "Capturable Piece!queen" << line << column << piece_list[a];
+                    return false;
+                }
+            }
+        }
+        column = new_p.y();
+        for(int line= new_p.x()-1;line BG 0;line--){
+            if(_board[line][new_p.y()]   NE piece_list[chess_pieces::Empty]){
+                if(_board[line][new_p.y()] EQ piece_list[chess_pieces::BlackRook] OR _board[line][new_p.y()] EQ piece_list[chess_pieces::BlackQueen]){
+                    //qDebug() << line << new_p.y() << _board[line][new_p.y()];
+                    //qDebug() << "Capturable Piece!queen" << line << y << piece_list[a];
+                    return false;
+                }
+            }
+        }
+        for(int line=new_p.x()+1;line SM 7;line++){
+            if(_board[line][new_p.y()]   NE piece_list[chess_pieces::Empty]){
+                if(_board[line][new_p.y()] EQ piece_list[chess_pieces::BlackRook] OR _board[line][new_p.y()] EQ piece_list[chess_pieces::BlackQueen]){
+                    //qDebug() << line << new_p.y() << _board[line][new_p.y()];
+                    //qDebug() << "Capturable Piece!queen" << line << y << piece_list[a];
+                    return false;
+                }
+            }
+        }
+        for(int column=new_p.y()-1;column BG 0;column--){
+            if(_board[new_p.x()][column] NE piece_list[chess_pieces::Empty]){
+                if(_board[new_p.x()][column] EQ piece_list[chess_pieces::BlackRook] OR _board[new_p.x()][column] EQ piece_list[chess_pieces::BlackQueen]){
+                    //qDebug() << new_p.x() << column << _board[new_p.x()][column];
+                    //qDebug() << "Capturable Piece!queen" << x << column << piece_list[a];
+                    return false;
+                }
+            }
+        }
+        for(int column=new_p.y()+1;column SM 7;column++){
+            if(_board[new_p.x()][column] NE piece_list[chess_pieces::Empty]){
+                if(_board[new_p.x()][column] EQ piece_list[chess_pieces::BlackRook] OR _board[new_p.x()][column] EQ piece_list[chess_pieces::BlackQueen]){
+                    //qDebug() << new_p.x() << column << _board[new_p.x()][column];
+                    //qDebug() << "Capturable Piece!queen" << x << column << piece_list[a];
+                    return false;
+                }
             }
         }
     }
-    for(int column=new_p.y()+1;column SM 7;column++){
-        if(_board[new_p.x()][column] NE piece_list[chess_pieces::Empty]){
-            if(_board[new_p.x()][column] EQ piece_list[chess_pieces::WhiteRook] OR _board[new_p.x()][column] EQ piece_list[chess_pieces::WhiteQueen]){
-                //qDebug() << new_p.x() << column << _board[new_p.x()][column];
-                //qDebug() << "Capturable Piece!queen" << x << column << piece_list[a];
-                pack.flag.check_mate_flag = false;
-            }
-        }
+    return true;
+}
+/* Şah Mat Düzenlenecek */
+??
+bool board::check_endgame()
+{
+    if(checkmate(mode::black,chessBoard)){
+        qDebug() << "Check Mate! White Win!";
+        return true;
     }
+    if(checkmate(mode::white,chessBoard)){
+        qDebug() << "Check Mate! Black Win!";
+        return true;
+    }
+    return false;
 }
 
 void board::getBlackMoves(char pieceName, int x, int y)
@@ -1040,4 +1221,14 @@ bool board::check(QPoint ex_p, QPoint new_p)
     return false;
 }
 
+QPoint board::getPiecePoint(char _board[8][8],char piece)
+{
+    for(int h = 0; h<8; h++){
+        for(int w = 0 ; w<8; w++){
+            if(_board[h][w] EQ piece){
+                return QPoint(h,w);
+            }
+        }
+    }
+}
 
