@@ -11,6 +11,7 @@ manager::manager(): QObject(NULL)
 {
     qDebug() << "Yapay Zeka Temelli Satranç Simulasyonu v0.1";
     qDebug() << "Game Start! Play a Move!";
+    qDebug() << "for help, write help";
     qDebug() << "White Turn!";
     start();
 }
@@ -38,7 +39,7 @@ void manager::turn_change(int turn_counter)
         c->test();
     }
     else if(turn_counter % 2 EQ 1){
-        qDebug() << "----> Possible Black Turn!";
+        qDebug() << "----> Black Turn!";
         m->findLegalMoves(mode::black);
     }
 

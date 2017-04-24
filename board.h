@@ -36,10 +36,12 @@ private:
     void show_board();
     bool check(QPoint ex_p, QPoint new_p);
     QPoint getPiecePoint(char _board[][8], char piece);
+    void help();
     int ex_x(std::__cxx11::string s);
     int ex_y(std::__cxx11::string s);
     int new_x(std::__cxx11::string s);
     int new_y(std::__cxx11::string s);
+    int turn = 0;
     int turn_counter = 0;
 public slots:
     void slot_msg_to_board(QPoint ex_p, QPoint new_p, std::string message);
