@@ -16,6 +16,10 @@ public:
         list << t;
     }
 
+    T at(int i){
+        return list.at(i);
+    }
+
     void pop(T & t)
     {
         t = list.takeFirst();

@@ -17,7 +17,7 @@ private:
     chess_pack           pack;
     safelist<chess_pack> *list;
     board                *b;
-    void calculateBoard(char board[][8]);
+    bool calculateBoard(char board[][8]);
 
 signals:
     void signalToBoard(message msg);

@@ -20,30 +20,26 @@ moveGenerator::~moveGenerator()
 
 void moveGenerator::findLegalMoves(int mode)
 {
+    char _board[8][8];
     srand(time(NULL));
     b->getBoard(mode);
+    TEST:
     int list_size = list->size();
     int v1 = rand() % list_size;
-
-    qDebug() << v1;
-    for(int i = 0; i < list_size; i++){
-        list->pop(pack);
-        char _board[8][8];
-        b->boardSimulate(QPoint(pack.X,pack.Y),QPoint(pack.destX,pack.destY),_board);
-        //calculateBoard(_board);
-        if(i EQ v1){
-            calculateBoard(_board);
-            b->slot_msg_to_board(QPoint(pack.X,pack.Y),QPoint(pack.destX,pack.destY),"aaaa");
-            list->clearList();
-        }
+    b->boardSimulate(QPoint(list->at(v1).X,list->at(v1).Y),QPoint(list->at(v1).destX,list->at(v1).destY),_board,list->at(v1).flag.castling.cast_stat);
+    if(b->checkmate(1,_board,QPoint(list->at(v1).X,list->at(v1).Y),QPoint(list->at(v1).destX,list->at(v1).destY))){
+        b->slot_msg_to_board(QPoint(list->at(v1).X,list->at(v1).Y),QPoint(list->at(v1).destX,list->at(v1).destY),"aaaa");
+        list->clearList();
+        delete _board;
     }
+    else{
+        goto TEST;
+    }
+
 }
 
-void moveGenerator::calculateBoard(char board[8][8])
+bool moveGenerator::calculateBoard(char board[8][8])
 {
-//    qDebug() << "pack.name:" << pack.name << "pack.x:" << pack.X << "pack.y:" << pack.Y
-//             << "pack.destX:" << pack.destX << "pack.destY:" << pack.destY;
-//    qDebug() << "";
     for(int h = 0 ; h<8; h++){
         qDebug() << h << 8 - h << " " << board[h][0] << board[h][1] << board[h][2] << board[h][3]
                  << board[h][4] << board[h][5] << board[h][6] << board[h][7];
@@ -51,4 +47,5 @@ void moveGenerator::calculateBoard(char board[8][8])
     qDebug() << "\n      A" << "B" << "C" << "D" << "E" << "F" << "G" << "H";
     qDebug() << "\n      0" << "1" << "2" << "3" << "4" << "5" << "6" << "7";
     qDebug() << "--------------------------------------------------------------------";
+    return true;
 }

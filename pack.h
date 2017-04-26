@@ -2,9 +2,29 @@
 #define PACK_H
 #include <QVector>
 
+
+enum castling_status{
+    none = 0 ,
+    short_castling,
+    long_castling
+};
+
+struct castling_flags{
+    int cast_stat = castling_status::none;
+    bool r1_flag = true;
+    bool r2_flag = true;
+    bool k_flag = true;
+    bool R1_flag = true;
+    bool R2_flag = true;
+    bool K_flag = true;
+};
+
+
+
 struct flags{
     bool capture_the_flag = false;
     bool check_mate_flag;
+    castling_flags castling;
 };
 
 struct chess_pack{
@@ -15,6 +35,8 @@ struct chess_pack{
     char name;
     flags flag;
 };
+
+
 
 
 

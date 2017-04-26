@@ -34,6 +34,11 @@ void manager::start()
 
 void manager::turn_change(int turn_counter)
 {
+    if(turn_counter % 2 EQ 0 AND turn_counter BG 2 ){
+        if(b->check_endgame()){
+            return;
+        }
+    }
     if(turn_counter % 2 EQ 0){
         qDebug() << "----> White Turn!";
         c->test();
