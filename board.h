@@ -22,7 +22,7 @@ public:
     void king(int x, int y)     ;
     void getBoard(int mode)     ;
     void boardSimulate(QPoint ex_p, QPoint new_p, char outStr[8][8], int casling_status = 0);
-    void getMoves(char pieceName, int x, int y);
+    void getMoves(char pieceName, int x, int y, int mode);
 
     bool checkmate(int mode, char board[][8], QPoint ex_p = QPoint(10,10) , QPoint new_p = QPoint(10,10));
     bool check_endgame();
@@ -38,12 +38,12 @@ private:
 
     safelist<chess_pack> *list;
     chess_pack  pack;
-    QPoint getPiecePoint(char _board[][8], char piece);
+    QPoint getKingPoint(char _board[][8], char piece);
 
     char chessBoard[8][8];
     char piece_list[14] = {'0','P','R','N','B','Q','K','p','r','n','b','q','k'};
 
-    bool check(QPoint ex_p, QPoint new_p);
+    bool check(QPoint ex_p, QPoint new_p, int mode);
 
     int ex_x(std::__cxx11::string s);
     int ex_y(std::__cxx11::string s);
