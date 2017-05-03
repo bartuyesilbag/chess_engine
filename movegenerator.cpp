@@ -23,19 +23,18 @@ void moveGenerator::findLegalMoves(int mode)
     char _board[8][8];
     srand(time(NULL));
     b->getBoard(mode);
-    TEST:
+    if(list->size() EQ 0){
+        qDebug() << "Check Mate! White Win!";
+    }
+TEST:
     int list_size = list->size();
     int v1 = rand() % list_size;
-    b->boardSimulate(QPoint(list->at(v1).X,list->at(v1).Y),QPoint(list->at(v1).destX,list->at(v1).destY),_board,list->at(v1).flag.castling.cast_stat);
-    if(b->checkmate(1,_board,QPoint(list->at(v1).X,list->at(v1).Y),QPoint(list->at(v1).destX,list->at(v1).destY))){
+    if(b->boardSimulate(QPoint(list->at(v1).X,list->at(v1).Y),QPoint(list->at(v1).destX,list->at(v1).destY),_board,list->at(v1).flag.castling.cast_stat)){
         b->slot_msg_to_board(QPoint(list->at(v1).X,list->at(v1).Y),QPoint(list->at(v1).destX,list->at(v1).destY),"aaaa");
         list->clearList();
         delete _board;
     }
-    else{
-        goto TEST;
-    }
-
+    goto TEST;
 }
 
 bool moveGenerator::calculateBoard(char board[8][8])

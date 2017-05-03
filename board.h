@@ -21,7 +21,7 @@ public:
     void queen(int x, int y)    ;
     void king(int x, int y)     ;
     void getBoard(int mode)     ;
-    void boardSimulate(QPoint ex_p, QPoint new_p, char outStr[8][8], int casling_status = 0);
+    bool boardSimulate(QPoint ex_p, QPoint new_p, char outStr[8][8], int casling_status = 0);
     void getMoves(char pieceName, int x, int y, int mode);
 
     bool checkmate(int mode, char board[][8], QPoint ex_p = QPoint(10,10) , QPoint new_p = QPoint(10,10));

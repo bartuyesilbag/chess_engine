@@ -23,7 +23,8 @@ struct castling_flags{
 
 struct flags{
     bool capture_the_flag = false;
-    bool check_mate_flag;
+    bool check_mate_flag_black = false;
+    bool check_mate_flag_white = false;
     castling_flags castling;
 };
 
