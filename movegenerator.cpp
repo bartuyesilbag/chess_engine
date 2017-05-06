@@ -4,6 +4,8 @@
 #include "pack.h"
 #include "pieces.h"
 #include "iostream"
+#include <QVector>
+
 #include <cstdlib>
 #include <ctime>
 
@@ -18,33 +20,57 @@ moveGenerator::~moveGenerator()
     qDebug() << "moveGenerator deleted!";
 }
 
-void moveGenerator::findLegalMoves(int mode)
+void moveGenerator::findLegalBlackMoves()
 {
+    qDebug() << "lol";
     char _board[8][8];
-    srand(time(NULL));
-    b->getBoard(mode);
-    if(list->size() EQ 0){
-        qDebug() << "Check Mate! White Win!";
+    b->getBoard(1);
+    int listSize = list->size();
+    for(int i = 0; i < listSize;i++){
+        list->pop(pack);
+        if(b->boardSimulate(QPoint(pack.X,pack.Y),QPoint(pack.destX,pack.destY),_board,pack.flag.castling.cast_stat)){
+            calculateBoard(_board,1);
+        }
     }
-TEST:
-    int list_size = list->size();
-    int v1 = rand() % list_size;
-    if(b->boardSimulate(QPoint(list->at(v1).X,list->at(v1).Y),QPoint(list->at(v1).destX,list->at(v1).destY),_board,list->at(v1).flag.castling.cast_stat)){
-        b->slot_msg_to_board(QPoint(list->at(v1).X,list->at(v1).Y),QPoint(list->at(v1).destX,list->at(v1).destY),"aaaa");
-        list->clearList();
-        delete _board;
-    }
-    goto TEST;
 }
 
-bool moveGenerator::calculateBoard(char board[8][8])
+void moveGenerator::find_legal_white_moves()
 {
-    for(int h = 0 ; h<8; h++){
-        qDebug() << h << 8 - h << " " << board[h][0] << board[h][1] << board[h][2] << board[h][3]
-                 << board[h][4] << board[h][5] << board[h][6] << board[h][7];
+
+}
+
+void moveGenerator::calculateBoard(char board[8][8], int mode)
+{
+    if(mode EQ 1){
+        for(int h = 0 ; h<8; h++){
+            qDebug() << h << 8 - h << " " << board[h][0] << board[h][1] << board[h][2] << board[h][3]
+                     << board[h][4] << board[h][5] << board[h][6] << board[h][7];
+        }
+        qDebug() << "\n      A" << "B" << "C" << "D" << "E" << "F" << "G" << "H";
+        qDebug() << "\n      0" << "1" << "2" << "3" << "4" << "5" << "6" << "7";
+        qDebug() << "--------------------------------------------------------------------";
     }
-    qDebug() << "\n      A" << "B" << "C" << "D" << "E" << "F" << "G" << "H";
-    qDebug() << "\n      0" << "1" << "2" << "3" << "4" << "5" << "6" << "7";
-    qDebug() << "--------------------------------------------------------------------";
-    return true;
+    else{
+
+    }
+
+    pack.score.push_back(0);
+}
+
+void moveGenerator::sort_scores(QVector<int> _score)
+{   
+    qSort(_score);
+}
+
+
+
+QString moveGenerator::black_move_to_screen(QPoint ex_p, QPoint new_p)
+{
+    QString move;
+    move  = horizontal[ex_p.y()] ;
+    move += verticle[ex_p.x()]   ;
+
+    move += horizontal[new_p.y()];
+    move += verticle[new_p.x()]  ;
+    return move;
 }

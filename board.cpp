@@ -27,11 +27,14 @@ void board::setup_board()
     }
 
     //chessBoard[1][1]   = piece_list[chess_pieces::WhiteRook  ];
-    chessBoard[3][1]   = piece_list[chess_pieces::WhiteRook  ];
-    chessBoard[3][0]   = piece_list[chess_pieces::WhiteQueen ];
-    chessBoard[2][4]   = piece_list[chess_pieces::BlackKing  ];
+    //chessBoard[3][1]   = piece_list[chess_pieces::WhiteRook  ];
+    //chessBoard[3][0]   = piece_list[chess_pieces::WhiteQueen ];
+    //chessBoard[2][4]   = piece_list[chess_pieces::BlackKing  ];
 
-
+//    chessBoard[realBoardHorizontal::five][realBoardVertical::h]   = piece_list[chess_pieces::WhitePawn ];
+//    chessBoard[realBoardHorizontal::one][realBoardVertical::h]   = piece_list[chess_pieces::WhiteKing ];
+//    chessBoard[realBoardHorizontal::five][realBoardVertical::a]   = piece_list[chess_pieces::BlackKing ];
+//    chessBoard[realBoardHorizontal::two][realBoardVertical::a]   = piece_list[chess_pieces::BlackPawn  ];
     /*chessBoard[realBoardHorizontal::one][realBoardVertical::h]   = piece_list[chess_pieces::WhitePawn  ];
     chessBoard[realBoardHorizontal::seven][realBoardVertical::a]   = piece_list[chess_pieces::WhiteRook  ];
     chessBoard[realBoardHorizontal::four ][realBoardVertical::d]   = piece_list[chess_pieces::BlackPawn  ];
@@ -41,31 +44,31 @@ void board::setup_board()
     chessBoard[realBoardHorizontal::five ][realBoardVertical::f]   = piece_list[chess_pieces::BlackPawn  ];
     chessBoard[realBoardHorizontal::five ][realBoardVertical::e]   = piece_list[chess_pieces::BlackKing];*/
 
-    //    for(int w = realBoardVertical::a; w SM realBoardVertical::h; w++){
-    //        chessBoard[realBoardHorizontal::two][w] = piece_list[chess_pieces::WhitePawn];
-    //    }
+        for(int w = realBoardVertical::a; w SM realBoardVertical::h; w++){
+            chessBoard[realBoardHorizontal::two][w] = piece_list[chess_pieces::WhitePawn];
+        }
 
-    //    chessBoard[realBoardHorizontal::one][realBoardVertical::a]   = piece_list[chess_pieces::WhiteRook  ];
-    //    chessBoard[realBoardHorizontal::one][realBoardVertical::b]   = piece_list[chess_pieces::WhiteKnight];
-    //    chessBoard[realBoardHorizontal::one][realBoardVertical::c]   = piece_list[chess_pieces::WhiteBishop];
-    //    chessBoard[realBoardHorizontal::one][realBoardVertical::d]   = piece_list[chess_pieces::WhiteQueen ];
-    //    chessBoard[realBoardHorizontal::one][realBoardVertical::e]   = piece_list[chess_pieces::WhiteKing  ];
-    //    chessBoard[realBoardHorizontal::one][realBoardVertical::f]   = piece_list[chess_pieces::WhiteBishop];
-    //    chessBoard[realBoardHorizontal::one][realBoardVertical::g]   = piece_list[chess_pieces::WhiteKnight];
-    //    chessBoard[realBoardHorizontal::one][realBoardVertical::h]   = piece_list[chess_pieces::WhiteRook  ];
+        chessBoard[realBoardHorizontal::one][realBoardVertical::a]   = piece_list[chess_pieces::WhiteRook  ];
+        chessBoard[realBoardHorizontal::one][realBoardVertical::b]   = piece_list[chess_pieces::WhiteKnight];
+        chessBoard[realBoardHorizontal::one][realBoardVertical::c]   = piece_list[chess_pieces::WhiteBishop];
+        chessBoard[realBoardHorizontal::one][realBoardVertical::d]   = piece_list[chess_pieces::WhiteQueen ];
+        chessBoard[realBoardHorizontal::one][realBoardVertical::e]   = piece_list[chess_pieces::WhiteKing  ];
+        chessBoard[realBoardHorizontal::one][realBoardVertical::f]   = piece_list[chess_pieces::WhiteBishop];
+        chessBoard[realBoardHorizontal::one][realBoardVertical::g]   = piece_list[chess_pieces::WhiteKnight];
+        chessBoard[realBoardHorizontal::one][realBoardVertical::h]   = piece_list[chess_pieces::WhiteRook  ];
 
-    //    for(int w = realBoardVertical::a; w SM realBoardVertical::h; w++){
-    //        chessBoard[realBoardHorizontal::seven][w] = piece_list[chess_pieces::BlackPawn];
-    //    }
+        for(int w = realBoardVertical::a; w SM realBoardVertical::h; w++){
+            chessBoard[realBoardHorizontal::seven][w] = piece_list[chess_pieces::BlackPawn];
+        }
 
-    //    chessBoard[realBoardHorizontal::eight][realBoardVertical::a] = piece_list[chess_pieces::BlackRook  ];
-    //    chessBoard[realBoardHorizontal::eight][realBoardVertical::b] = piece_list[chess_pieces::BlackKnight];
-    //    chessBoard[realBoardHorizontal::eight][realBoardVertical::c] = piece_list[chess_pieces::BlackBishop];
-    //    chessBoard[realBoardHorizontal::eight][realBoardVertical::d] = piece_list[chess_pieces::BlackQueen ];
-    //    chessBoard[realBoardHorizontal::eight][realBoardVertical::e] = piece_list[chess_pieces::BlackKing  ];
-    //    chessBoard[realBoardHorizontal::eight][realBoardVertical::f] = piece_list[chess_pieces::BlackBishop];
-    //    chessBoard[realBoardHorizontal::eight][realBoardVertical::g] = piece_list[chess_pieces::BlackKnight];
-    //    chessBoard[realBoardHorizontal::eight][realBoardVertical::h] = piece_list[chess_pieces::BlackRook  ];
+        chessBoard[realBoardHorizontal::eight][realBoardVertical::a] = piece_list[chess_pieces::BlackRook  ];
+        chessBoard[realBoardHorizontal::eight][realBoardVertical::b] = piece_list[chess_pieces::BlackKnight];
+        chessBoard[realBoardHorizontal::eight][realBoardVertical::c] = piece_list[chess_pieces::BlackBishop];
+        chessBoard[realBoardHorizontal::eight][realBoardVertical::d] = piece_list[chess_pieces::BlackQueen ];
+        chessBoard[realBoardHorizontal::eight][realBoardVertical::e] = piece_list[chess_pieces::BlackKing  ];
+        chessBoard[realBoardHorizontal::eight][realBoardVertical::f] = piece_list[chess_pieces::BlackBishop];
+        chessBoard[realBoardHorizontal::eight][realBoardVertical::g] = piece_list[chess_pieces::BlackKnight];
+        chessBoard[realBoardHorizontal::eight][realBoardVertical::h] = piece_list[chess_pieces::BlackRook  ];
 
 }
 
@@ -75,32 +78,32 @@ void board::slot_msg_to_board(QPoint ex_p,QPoint new_p,std::string message)
         pack.flag.capture_the_flag = true;
     }
 
-    if(message EQ "board"){
+    if(message EQ "board" OR message EQ "BOARD"){
         show_board();
         emit signal_from_board(turn_counter);
     }
-    else if (message EQ "turn?") {
+    else if (message EQ "turn" OR message EQ "TURN") {
         qDebug() << "turn count: " << turn_counter;
         emit signal_from_board(turn_counter);
     }
-    else if (message EQ "restart") {
+    else if (message EQ "restart" OR message EQ "RESTART") {
         setup_board();
         turn_counter = 0;
         qDebug() << "Match Started Again!";
         emit signal_from_board(turn_counter);
     }
-    else if (message EQ "clear") {
+    else if (message EQ "clear" OR message EQ "CLEAR") {
         system("clear");
         emit signal_from_board(turn_counter);
     }
-    else if (message EQ "quit") {
+    else if (message EQ "quit" OR message EQ "QUIT") {
         return;
     }
-    else if (message EQ "help") {
+    else if (message EQ "help" OR message EQ "HELP") {
         help();
         emit signal_from_board(turn_counter);
     }
-    else if(message.size() NE 4){
+    else if(message.size() NE 4 OR message EQ "LOL"){
         qDebug() << "Wrong Input! Please try again!";
         emit signal_from_board(turn_counter);
     }
@@ -126,14 +129,16 @@ void board::slot_msg_to_board(QPoint ex_p,QPoint new_p,std::string message)
                 /* siyaha şah çekilme durumu */
 
                 if(pack.flag.check_mate_flag_black EQ true AND !checkmate((turn_counter) % 2,chessBoard)){
+                    qDebug() << "Check-Mate! White Wins!";
+                    return;
                 }
                 else{
                     pack.flag.check_mate_flag_black = false;
                 }
                 if(!checkmate((turn_counter + 1) % 2,chessBoard)){
                     pack.flag.check_mate_flag_black = true;
+                    qDebug() << "Check for Black King!";
                 }
-
 
                 /* beyaza şah çekilme durumu */
 
@@ -148,11 +153,23 @@ void board::slot_msg_to_board(QPoint ex_p,QPoint new_p,std::string message)
                     pack.flag.check_mate_flag_white = true;
                     qDebug() << "Check for White King!";
                 }
+
+                if(new_p.x() EQ 0 and c EQ piece_list[chess_pieces::WhitePawn]){
+                    std::string message;
+                    qDebug() << "Change White Pawn! Enter a letter, e.g. 'r', 'n', 'b', 'q'!";
+                    std::cin >> message;
+                    qDebug() << "White Pawn changed with " << QString::fromUtf8(message.c_str());
+                    chessBoard[new_p.x()][new_p.y()] = message.at(0);
+                }
+                if(new_p.x() EQ 7 and c EQ piece_list[chess_pieces::BlackPawn]){
+                    chessBoard[new_p.x()][new_p.y()] = piece_list[chess_pieces::BlackQueen];
+                    qDebug() << "Black Pawn changed with Queen ";
+                }
                 turn_counter++;
                 emit signal_from_board(turn_counter);
             }
         }
-        else if (pack.flag.castling.k_flag EQ true) {
+        else if (pack.flag.castling.k_flag EQ true AND chessBoard[ex_p.x()][ex_p.y()] NE piece_list[chess_pieces::Empty]) {
             if(pack.flag.castling.r1_flag EQ true AND new_p.y() EQ 2 AND c EQ piece_list[chess_pieces::WhiteKing] //uzun rok durumu
                     AND chessBoard[7][1] EQ piece_list[chess_pieces::Empty]
                     AND chessBoard[7][2] EQ piece_list[chess_pieces::Empty]
@@ -163,7 +180,6 @@ void board::slot_msg_to_board(QPoint ex_p,QPoint new_p,std::string message)
                 chessBoard[new_p.x()][new_p.y()] = c;
                 if(!checkmate((turn_counter + 1) % 2,chessBoard)){
                     pack.flag.check_mate_flag_black = true;
-                    qDebug() << "pack.flag.check_mate_flag_black = true; 1" << turn_counter;
                 }
                 turn_counter++;
                 emit signal_from_board(turn_counter);
@@ -177,7 +193,6 @@ void board::slot_msg_to_board(QPoint ex_p,QPoint new_p,std::string message)
                 chessBoard[new_p.x()][new_p.y()] = c;
                 if(!checkmate((turn_counter + 1) % 2,chessBoard)){
                     pack.flag.check_mate_flag_black = true;
-                    qDebug() << "pack.flag.check_mate_flag_black = true; 2" << turn_counter;
                 }
                 turn_counter++;
                 emit signal_from_board(turn_counter);

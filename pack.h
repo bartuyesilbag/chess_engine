@@ -20,21 +20,23 @@ struct castling_flags{
 };
 
 
-
 struct flags{
     bool capture_the_flag = false;
     bool check_mate_flag_black = false;
     bool check_mate_flag_white = false;
+    bool pawn_change_flag_black = false;
+    bool pawn_change_flag_white = false;
     castling_flags castling;
 };
 
 struct chess_pack{
-    int X;
-    int Y;
-    int destX;
-    int destY;
-    char name;
-    flags flag;
+    int           X;
+    int           Y;
+    int           destX;
+    int           destY;
+    char          name;
+    QVector<int>  score;
+    flags         flag;
 };
 
 

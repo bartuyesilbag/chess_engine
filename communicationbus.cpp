@@ -21,11 +21,13 @@ void communicationBus::test()
     if(message.size() >= 4){
         emit signalFromComBus(QPoint(ex_x(message),ex_y(message)),QPoint(new_x(message),new_y(message)),message);
     }
+    else{
+        emit signalFromComBus(QPoint(0,0),QPoint(0,0),"LOL");
+    }
 }
 
 int communicationBus::ex_x(std::__cxx11::string s)
 {
-
     return '8' - (int)s.at(1);
 }
 

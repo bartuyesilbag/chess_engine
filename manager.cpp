@@ -9,7 +9,13 @@
 
 manager::manager(): QObject(NULL)
 {
-    qDebug() << "Yapay Zeka Temelli Satranç Simulasyonu v0.1";
+    qDebug() << "|---------------------------------------------|";
+    qDebug() << "|Yapay Zeka Temelli Satranç Simulasyonu v0.0.1|";
+    qDebug() << "|Bartu Yeşilbağ                               |";
+    qDebug() << "|Tez Danışmanı: Nihan Kahraman                |";
+    qDebug() << "|YTU EHM 2016-2017 Bitirme Tezi               |";
+    qDebug() << "|---------------------------------------------|";
+    qDebug() << "";
     qDebug() << "Game Start! Play a Move!";
     qDebug() << "for help, write help";
     qDebug() << "White Turn!";
@@ -44,7 +50,7 @@ void manager::turn_change(int turn_counter)
         c->test();
     }
     else if(turn_counter % 2 EQ 1){
-        m->findLegalMoves(mode::black);
+        m->findLegalBlackMoves();
     }
 
 }
