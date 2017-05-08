@@ -1277,12 +1277,10 @@ bool board::check(QPoint ex_p, QPoint new_p,int _mode)
     else if(_mode EQ mode::black){
         _list_ = list;
     }
-    qDebug() << "size: "  << _list_->size();
     char c = chessBoard[ex_p.x()][ex_p.y()];
     getMoves(c,ex_p.x(),ex_p.y(),_mode,chessBoard);
     int list_size = _list_->size();
     for(int i = 0; i < list_size; i++){
-        qDebug() << 7;
         _list_->pop(pack);
         if(pack.destX EQ new_p.x() AND pack.destY EQ new_p.y()){
             _list_->clearList();

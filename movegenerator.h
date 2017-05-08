@@ -15,15 +15,15 @@ public:
 private:
     void msgToBoard(QPoint ex_p, QPoint new_p);
     void calculateBoard(char board[][8], int _mode, int count = 0);
-    QVector<int> sort_scores(QVector<int> _score);
+    int get_max(QVector<int> _scores);
     void find_legal_white_moves(int count);
     void fill_board(char _board[][8]);
     QString black_move_to_screen(QPoint ex_p, QPoint new_p);
 
-    chess_pack           pack;
-    score_pack           white_score_pack;
-    score_pack           black_score_pack;
-    score_pack           general_score_pack;
+    chess_pack            pack;
+    score_pack            white_pack;
+    score_pack            black_pack;
+    score_pack            general_pack;
     safelist<chess_pack> *list;
     safelist<chess_pack> *white_list;
     board                *b;

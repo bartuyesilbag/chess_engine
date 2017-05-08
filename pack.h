@@ -29,10 +29,6 @@ struct flags{
     castling_flags castling;
 };
 
-struct score_pack{
-    QVector<int> score;
-};
-
 struct chess_pack{
     int           X;
     int           Y;
@@ -41,6 +37,13 @@ struct chess_pack{
     char          name;
     flags         flag;
 };
+
+struct score_pack{
+    QVector<int> score;
+    chess_pack   pack;
+};
+
+
 
 
 
