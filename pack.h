@@ -1,7 +1,7 @@
 #ifndef PACK_H
 #define PACK_H
+#include <safelist.h>
 #include <QVector>
-
 
 enum castling_status{
     none = 0 ,
@@ -29,13 +29,16 @@ struct flags{
     castling_flags castling;
 };
 
+struct score_pack{
+    QVector<int> score;
+};
+
 struct chess_pack{
     int           X;
     int           Y;
     int           destX;
     int           destY;
     char          name;
-    QVector<int>  score;
     flags         flag;
 };
 

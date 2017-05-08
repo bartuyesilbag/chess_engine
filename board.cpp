@@ -11,9 +11,10 @@
 #include <QPoint>
 #include <QObject>
 
-board::board(safelist<chess_pack> *_list, QObject *parent) : QObject(parent)
+board::board(safelist<chess_pack> *_list, safelist<chess_pack> *_white_list, QObject *parent) : QObject(parent)
 {
     list = _list;
+    white_list = _white_list;
     setup_board();
 
 }
@@ -26,15 +27,15 @@ void board::setup_board()
         }
     }
 
-    //chessBoard[1][1]   = piece_list[chess_pieces::WhiteRook  ];
-    //chessBoard[3][1]   = piece_list[chess_pieces::WhiteRook  ];
-    //chessBoard[3][0]   = piece_list[chess_pieces::WhiteQueen ];
-    //chessBoard[2][4]   = piece_list[chess_pieces::BlackKing  ];
+    //    chessBoard[1][1]   = piece_list[chess_pieces::WhiteRook  ];
+    //    chessBoard[3][1]   = piece_list[chess_pieces::WhiteRook  ];
+    //    chessBoard[3][0]   = piece_list[chess_pieces::WhiteQueen ];
+    //    chessBoard[2][4]   = piece_list[chess_pieces::BlackKing  ];
 
-//    chessBoard[realBoardHorizontal::five][realBoardVertical::h]   = piece_list[chess_pieces::WhitePawn ];
-//    chessBoard[realBoardHorizontal::one][realBoardVertical::h]   = piece_list[chess_pieces::WhiteKing ];
-//    chessBoard[realBoardHorizontal::five][realBoardVertical::a]   = piece_list[chess_pieces::BlackKing ];
-//    chessBoard[realBoardHorizontal::two][realBoardVertical::a]   = piece_list[chess_pieces::BlackPawn  ];
+    //    chessBoard[realBoardHorizontal::five][realBoardVertical::h]   = piece_list[chess_pieces::WhitePawn ];
+    //    chessBoard[realBoardHorizontal::one][realBoardVertical::h]   = piece_list[chess_pieces::WhiteKing ];
+    //    chessBoard[realBoardHorizontal::five][realBoardVertical::a]   = piece_list[chess_pieces::BlackKing ];
+    //    chessBoard[realBoardHorizontal::two][realBoardVertical::a]   = piece_list[chess_pieces::BlackPawn  ];
     /*chessBoard[realBoardHorizontal::one][realBoardVertical::h]   = piece_list[chess_pieces::WhitePawn  ];
     chessBoard[realBoardHorizontal::seven][realBoardVertical::a]   = piece_list[chess_pieces::WhiteRook  ];
     chessBoard[realBoardHorizontal::four ][realBoardVertical::d]   = piece_list[chess_pieces::BlackPawn  ];
@@ -44,31 +45,31 @@ void board::setup_board()
     chessBoard[realBoardHorizontal::five ][realBoardVertical::f]   = piece_list[chess_pieces::BlackPawn  ];
     chessBoard[realBoardHorizontal::five ][realBoardVertical::e]   = piece_list[chess_pieces::BlackKing];*/
 
-        for(int w = realBoardVertical::a; w SM realBoardVertical::h; w++){
-            chessBoard[realBoardHorizontal::two][w] = piece_list[chess_pieces::WhitePawn];
-        }
+    for(int w = realBoardVertical::a; w SM realBoardVertical::h; w++){
+        chessBoard[realBoardHorizontal::two][w] = piece_list[chess_pieces::WhitePawn];
+    }
 
-        chessBoard[realBoardHorizontal::one][realBoardVertical::a]   = piece_list[chess_pieces::WhiteRook  ];
-        chessBoard[realBoardHorizontal::one][realBoardVertical::b]   = piece_list[chess_pieces::WhiteKnight];
-        chessBoard[realBoardHorizontal::one][realBoardVertical::c]   = piece_list[chess_pieces::WhiteBishop];
-        chessBoard[realBoardHorizontal::one][realBoardVertical::d]   = piece_list[chess_pieces::WhiteQueen ];
-        chessBoard[realBoardHorizontal::one][realBoardVertical::e]   = piece_list[chess_pieces::WhiteKing  ];
-        chessBoard[realBoardHorizontal::one][realBoardVertical::f]   = piece_list[chess_pieces::WhiteBishop];
-        chessBoard[realBoardHorizontal::one][realBoardVertical::g]   = piece_list[chess_pieces::WhiteKnight];
-        chessBoard[realBoardHorizontal::one][realBoardVertical::h]   = piece_list[chess_pieces::WhiteRook  ];
+    chessBoard[realBoardHorizontal::one][realBoardVertical::a]   = piece_list[chess_pieces::WhiteRook  ];
+    chessBoard[realBoardHorizontal::one][realBoardVertical::b]   = piece_list[chess_pieces::WhiteKnight];
+    chessBoard[realBoardHorizontal::one][realBoardVertical::c]   = piece_list[chess_pieces::WhiteBishop];
+    chessBoard[realBoardHorizontal::one][realBoardVertical::d]   = piece_list[chess_pieces::WhiteQueen ];
+    chessBoard[realBoardHorizontal::one][realBoardVertical::e]   = piece_list[chess_pieces::WhiteKing  ];
+    chessBoard[realBoardHorizontal::one][realBoardVertical::f]   = piece_list[chess_pieces::WhiteBishop];
+    chessBoard[realBoardHorizontal::one][realBoardVertical::g]   = piece_list[chess_pieces::WhiteKnight];
+    chessBoard[realBoardHorizontal::one][realBoardVertical::h]   = piece_list[chess_pieces::WhiteRook  ];
 
-        for(int w = realBoardVertical::a; w SM realBoardVertical::h; w++){
-            chessBoard[realBoardHorizontal::seven][w] = piece_list[chess_pieces::BlackPawn];
-        }
+    for(int w = realBoardVertical::a; w SM realBoardVertical::h; w++){
+        chessBoard[realBoardHorizontal::seven][w] = piece_list[chess_pieces::BlackPawn];
+    }
 
-        chessBoard[realBoardHorizontal::eight][realBoardVertical::a] = piece_list[chess_pieces::BlackRook  ];
-        chessBoard[realBoardHorizontal::eight][realBoardVertical::b] = piece_list[chess_pieces::BlackKnight];
-        chessBoard[realBoardHorizontal::eight][realBoardVertical::c] = piece_list[chess_pieces::BlackBishop];
-        chessBoard[realBoardHorizontal::eight][realBoardVertical::d] = piece_list[chess_pieces::BlackQueen ];
-        chessBoard[realBoardHorizontal::eight][realBoardVertical::e] = piece_list[chess_pieces::BlackKing  ];
-        chessBoard[realBoardHorizontal::eight][realBoardVertical::f] = piece_list[chess_pieces::BlackBishop];
-        chessBoard[realBoardHorizontal::eight][realBoardVertical::g] = piece_list[chess_pieces::BlackKnight];
-        chessBoard[realBoardHorizontal::eight][realBoardVertical::h] = piece_list[chess_pieces::BlackRook  ];
+    chessBoard[realBoardHorizontal::eight][realBoardVertical::a] = piece_list[chess_pieces::BlackRook  ];
+    chessBoard[realBoardHorizontal::eight][realBoardVertical::b] = piece_list[chess_pieces::BlackKnight];
+    chessBoard[realBoardHorizontal::eight][realBoardVertical::c] = piece_list[chess_pieces::BlackBishop];
+    chessBoard[realBoardHorizontal::eight][realBoardVertical::d] = piece_list[chess_pieces::BlackQueen ];
+    chessBoard[realBoardHorizontal::eight][realBoardVertical::e] = piece_list[chess_pieces::BlackKing  ];
+    chessBoard[realBoardHorizontal::eight][realBoardVertical::f] = piece_list[chess_pieces::BlackBishop];
+    chessBoard[realBoardHorizontal::eight][realBoardVertical::g] = piece_list[chess_pieces::BlackKnight];
+    chessBoard[realBoardHorizontal::eight][realBoardVertical::h] = piece_list[chess_pieces::BlackRook  ];
 
 }
 
@@ -123,6 +124,7 @@ void board::slot_msg_to_board(QPoint ex_p,QPoint new_p,std::string message)
                 emit signal_from_board(turn_counter);
             }
             else{
+
                 chessBoard[ex_p.x()][ex_p.y()]   = piece_list[chess_pieces::Empty];
                 chessBoard[new_p.x()][new_p.y()] = c;
 
@@ -205,526 +207,526 @@ void board::slot_msg_to_board(QPoint ex_p,QPoint new_p,std::string message)
     }
 }
 
-void board::rook(int x, int y)
+void board::rook(int x, int y,safelist<chess_pack> *_list,int _mode,char board[8][8])
 {
     for(int line=x-1;line BG 0;line--){
-        if(chessBoard[line][y]   NE piece_list[chess_pieces::Empty]){
-            int a = std::distance(piece_list, std::find(piece_list, piece_list + 14, chessBoard[line][y]));
-            if(a > 6 AND turn_counter % 2 EQ 1 OR a <= 6 AND turn_counter % 2 EQ 0 AND turn_counter % 2 EQ 1 OR a <= 6 AND turn_counter % 2 EQ 0){
+        if(board[line][y]   NE piece_list[chess_pieces::Empty]){
+            int a = std::distance(piece_list, std::find(piece_list, piece_list + 14, board[line][y]));
+            if(a > 6 AND _mode EQ 1 OR a <= 6 AND _mode EQ 0 ){
                 pack.flag.capture_the_flag = true;
                 pack.destX      = line  ;
                 pack.destY      = y     ;
-                list->push(pack)        ;
+                _list->push(pack)       ;
             }
             break;
         }
         pack.destX      = line  ;
         pack.destY      = y     ;
-        list->push(pack)        ;
+        _list->push(pack)       ;
     }
     for(int line=x+1;line SM 7;line++){
-        if(chessBoard[line][y]   NE piece_list[chess_pieces::Empty]){
-            int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, chessBoard[line][y]));
-            if(a > 6 AND turn_counter % 2 EQ 1 OR a <= 6 AND turn_counter % 2 EQ 0){
+        if(board[line][y]   NE piece_list[chess_pieces::Empty]){
+            int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, board[line][y]));
+            if(a > 6 AND _mode EQ 1 OR a <= 6 AND _mode EQ 0){
                 pack.flag.capture_the_flag = true;
                 pack.destX      = line  ;
                 pack.destY      = y     ;
-                list->push(pack)        ;
+                _list->push(pack)       ;
             }
             break;
         }
         pack.destX      = line  ;
         pack.destY      = y     ;
-        list->push(pack);
+        _list->push(pack);
     }
     for(int column=y-1;column BG 0;column--){
-        if(chessBoard[x][column] NE piece_list[chess_pieces::Empty]){
-            int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, chessBoard[x][column]));
-            if(a > 6 AND turn_counter % 2 EQ 1 OR a <= 6 AND turn_counter % 2 EQ 0){
+        if(board[x][column] NE piece_list[chess_pieces::Empty]){
+            int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, board[x][column]));
+            if(a > 6 AND _mode EQ 1 OR a <= 6 AND _mode EQ 0){
                 pack.flag.capture_the_flag = true;
                 pack.destX      = x     ;
                 pack.destY      = column;
-                list->push(pack)        ;
+                _list->push(pack)       ;
 
             }
             break;
         }
         pack.destX      = x     ;
         pack.destY      = column;
-        list->push(pack);
+        _list->push(pack);
     }
     for(int column=y+1;column SM 7;column++){
-        if(chessBoard[x][column] NE piece_list[chess_pieces::Empty]){
-            int a = std::distance(piece_list, std::find(piece_list, piece_list + 14, chessBoard[x][column]));
-            if(a > 6 AND turn_counter % 2 EQ 1 OR a <= 6 AND turn_counter % 2 EQ 0){
+        if(board[x][column] NE piece_list[chess_pieces::Empty]){
+            int a = std::distance(piece_list, std::find(piece_list, piece_list + 14, board[x][column]));
+            if(a > 6 AND _mode EQ 1 OR a <= 6 AND _mode EQ 0){
                 pack.flag.capture_the_flag = true;
                 pack.destX      = x     ;
                 pack.destY      = column;
-                list->push(pack)        ;
+                _list->push(pack)       ;
 
             }
             break;
         }
         pack.destX      = x     ;
         pack.destY      = column;
-        list->push(pack);
+        _list->push(pack);
     }
 }
 
-void board::knight(int x, int y)
+void board::knight(int x, int y,safelist<chess_pack> *_list,int _mode,char board[8][8])
 {
-    if(chessBoard[x+1][y+2] EQ piece_list[chess_pieces::Empty] && x+1 SM 7 && y+2 SM 7){
+    if(board[x+1][y+2] EQ piece_list[chess_pieces::Empty] && x+1 SM 7 && y+2 SM 7){
 
         pack.destX      = x+1   ;
         pack.destY      = y+2   ;
-        list->push(pack);
+        _list->push(pack);
     }
     else if(x+1 SM 7 && y+2 SM 7){
-        int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, chessBoard[x+1][y+2]));
-        if(a > 6 AND turn_counter % 2 EQ 1 OR a <= 6 AND turn_counter % 2 EQ 0){
+        int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, board[x+1][y+2]));
+        if((a > 6 AND _mode EQ 1) OR (a <= 6 AND _mode EQ 0)){
             pack.flag.capture_the_flag = true;
             pack.destX      = x+1   ;
             pack.destY      = y+2   ;
-            list->push(pack);
+            _list->push(pack);
         }
     }
-    if(chessBoard[x+1][y-2] EQ piece_list[chess_pieces::Empty] && x+1 SM 7 && y-2 BG 0){
+    if(board[x+1][y-2] EQ piece_list[chess_pieces::Empty] && x+1 SM 7 && y-2 BG 0){
         pack.destX      = x+1   ;
         pack.destY      = y-2   ;
-        list->push(pack);
+        _list->push(pack);
     }
     else if(x+1 SM 7 && y-2 BG 0){
-        int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, chessBoard[x+1][y-2]));
-        if(a > 6 AND turn_counter % 2 EQ 1 OR a <= 6 AND turn_counter % 2 EQ 0){
+        int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, board[x+1][y-2]));
+        if((a > 6 AND _mode EQ 1) OR (a <= 6 AND _mode EQ 0)){
             pack.flag.capture_the_flag = true;
             pack.destX      = x+1   ;
             pack.destY      = y-2   ;
-            list->push(pack);
+            _list->push(pack);
         }
     }
-    if(chessBoard[x-1][y+2] EQ piece_list[chess_pieces::Empty] && x-1 BG 0 && y+2 SM 7){
+    if(board[x-1][y+2] EQ piece_list[chess_pieces::Empty] && x-1 BG 0 && y+2 SM 7){
         pack.destX      = x-1   ;
         pack.destY      = y+2   ;
-        list->push(pack);
+        _list->push(pack);
     }
     else if(x-1 BG 0 && y+2 SM 7){
-        int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, chessBoard[x-1][y+2]));
-        if(a > 6 AND turn_counter % 2 EQ 1 OR a <= 6 AND turn_counter % 2 EQ 0){
+        int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, board[x-1][y+2]));
+        if((a > 6 AND _mode EQ 1) OR (a <= 6 AND _mode EQ 0)){
             pack.flag.capture_the_flag = true;
             pack.destX      = x-1   ;
             pack.destY      = y+2   ;
-            list->push(pack);
+            _list->push(pack);
         }
     }
-    if(chessBoard[x-1][y-2] EQ piece_list[chess_pieces::Empty] && x-1 BG 0 && y-2 BG 0){
+    if(board[x-1][y-2] EQ piece_list[chess_pieces::Empty] && x-1 BG 0 && y-2 BG 0){
         pack.destX      = x-1   ;
         pack.destY      = y-2   ;
-        list->push(pack);
+        _list->push(pack);
     }
     else if(x-1 BG 0 && y-2 BG 0){
-        int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, chessBoard[x-1][y-2]));
-        if(a > 6 AND turn_counter % 2 EQ 1 OR a <= 6 AND turn_counter % 2 EQ 0){
+        int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, board[x-1][y-2]));
+        if((a > 6 AND _mode EQ 1) OR (a <= 6 AND _mode EQ 0)){
             pack.flag.capture_the_flag = true;
             pack.destX      = x-1   ;
             pack.destY      = y-2   ;
-            list->push(pack);
+            _list->push(pack);
         }
     }
-    if(chessBoard[x+2][y+1] EQ piece_list[chess_pieces::Empty] && x+2 SM 7 && y+1 SM 7){
+    if(board[x+2][y+1] EQ piece_list[chess_pieces::Empty] && x+2 SM 7 && y+1 SM 7){
         pack.destX      = x+2   ;
         pack.destY      = y+1   ;
-        list->push(pack);
+        _list->push(pack);
     }
     else if(x+2 SM 7 && y+1 SM 7){
-        int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, chessBoard[x+2][y+1]));
-        if(a > 6 AND turn_counter % 2 EQ 1 OR a <= 6 AND turn_counter % 2 EQ 0){
+        int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, board[x+2][y+1]));
+        if((a > 6 AND _mode EQ 1) OR (a <= 6 AND _mode EQ 0)){
             pack.flag.capture_the_flag = true;
             pack.destX      = x+2   ;
             pack.destY      = y+1   ;
-            list->push(pack);
+            _list->push(pack);
         }
     }
-    if(chessBoard[x+2][y-1] EQ piece_list[chess_pieces::Empty] && x+2 SM 7 && y-1 BG 0){
+    if(board[x+2][y-1] EQ piece_list[chess_pieces::Empty] && x+2 SM 7 && y-1 BG 0){
         pack.destX      = x+2   ;
         pack.destY      = y-1   ;
-        list->push(pack);
+        _list->push(pack);
     }
     else if(x+2 SM 7 && y-1 BG 0){
-        int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, chessBoard[x+2][y-1]));
-        if(a > 6 AND turn_counter % 2 EQ 1 OR a <= 6 AND turn_counter % 2 EQ 0){
+        int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, board[x+2][y-1]));
+        if((a > 6 AND _mode EQ 1) OR (a <= 6 AND _mode EQ 0)){
             pack.flag.capture_the_flag = true;
             pack.destX      = x+2   ;
             pack.destY      = y-1   ;
-            list->push(pack);
+            _list->push(pack);
         }
     }
-    if(chessBoard[x-2][y+1] EQ piece_list[chess_pieces::Empty] && x-2 BG 0 && y+1 SM 7){
+    if(board[x-2][y+1] EQ piece_list[chess_pieces::Empty] && x-2 BG 0 && y+1 SM 7){
         pack.destX      = x-2   ;
         pack.destY      = y+1   ;
-        list->push(pack);
+        _list->push(pack);
     }
     else if(x-2 BG 0 && y+1 SM 7){
-        int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, chessBoard[x-2][y+1]));
-        if(a > 6 AND turn_counter % 2 EQ 1 OR a <= 6 AND turn_counter % 2 EQ 0){
+        int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, board[x-2][y+1]));
+        if((a > 6 AND _mode EQ 1) OR (a <= 6 AND _mode EQ 0)){
             pack.flag.capture_the_flag = true;
             pack.destX      = x-2   ;
             pack.destY      = y+1   ;
-            list->push(pack);
+            _list->push(pack);
         }
     }
-    if(chessBoard[x-2][y-1] EQ piece_list[chess_pieces::Empty] && x-2 BG 0 && y-1 BG 0){
+    if(board[x-2][y-1] EQ piece_list[chess_pieces::Empty] && x-2 BG 0 && y-1 BG 0){
         pack.destX      = x-2   ;
         pack.destY      = y-1   ;
-        list->push(pack);
+        _list->push(pack);
     }
     else if(x-2 BG 0 && y-1 BG 0){
-        int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, chessBoard[x-2][y-1]));
-        if(a > 6 AND turn_counter % 2 EQ 1 OR a <= 6 AND turn_counter % 2 EQ 0){
+        int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, board[x-2][y-1]));
+        if((a > 6 AND _mode EQ 1) OR (a <= 6 AND _mode EQ 0)){
             pack.flag.capture_the_flag = true;
             pack.destX      = x-2   ;
             pack.destY      = y-1   ;
-            list->push(pack);
+            _list->push(pack);
         }
     }
 }
 
-void board::bishop(int x, int y)
+void board::bishop(int x, int y,safelist<chess_pack> *_list,int _mode,char board[8][8])
 {
     int column = y;
     for(int line = x-1;line BG 0; line--){
         column = column - 1;
-        if(chessBoard[line][column] NE piece_list[chess_pieces::Empty] || column < 0){
-            int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, chessBoard[line][column]));
-            if(a > 6 AND turn_counter % 2 EQ 1 OR a <= 6 AND turn_counter % 2 EQ 0){
+        if(board[line][column] NE piece_list[chess_pieces::Empty] || column < 0){
+            int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, board[line][column]));
+            if(a > 6 AND _mode EQ 1 OR a <= 6 AND _mode EQ 0){
                 pack.flag.capture_the_flag = true;
                 pack.destX      = line   ;
                 pack.destY      = column ;
-                list->push(pack);
+                _list->push(pack);
             }
             column = y;
             break;
         }
         pack.destX      = line   ;
         pack.destY      = column ;
-        list->push(pack);
+        _list->push(pack);
     }
     for(int line = x+1;line SM 7; line++){
         column = column + 1;
-        if(chessBoard[line][column] NE piece_list[chess_pieces::Empty] || column > 7){
-            int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, chessBoard[line][column]));
-            if(a > 6 AND turn_counter % 2 EQ 1 OR a <= 6 AND turn_counter % 2 EQ 0){
+        if(board[line][column] NE piece_list[chess_pieces::Empty] || column > 7){
+            int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, board[line][column]));
+            if(a > 6 AND _mode EQ 1 OR a <= 6 AND _mode EQ 0){
                 pack.flag.capture_the_flag = true;
                 pack.destX      = line   ;
                 pack.destY      = column ;
-                list->push(pack);
+                _list->push(pack);
             }
             column = y;
             break;
         }
         pack.destX      = line   ;
         pack.destY      = column ;
-        list->push(pack);
+        _list->push(pack);
     }
     for(int line = x+1;line SM 7; line++){
         column = column - 1;
-        if(chessBoard[line][column] NE piece_list[chess_pieces::Empty] || column < 0){
-            int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, chessBoard[line][column]));
-            if(a > 6 AND turn_counter % 2 EQ 1 OR a <= 6 AND turn_counter % 2 EQ 0){
+        if(board[line][column] NE piece_list[chess_pieces::Empty] || column < 0){
+            int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, board[line][column]));
+            if(a > 6 AND _mode EQ 1 OR a <= 6 AND _mode EQ 0){
                 pack.flag.capture_the_flag = true;
                 pack.destX      = line   ;
                 pack.destY      = column ;
-                list->push(pack);
+                _list->push(pack);
             }
             column = y;
             break;
         }
         pack.destX      = line   ;
         pack.destY      = column ;
-        list->push(pack);
+        _list->push(pack);
     }
     for(int line = x-1;line BG 0; line--){
         column = column + 1;
-        if(chessBoard[line][column] NE piece_list[chess_pieces::Empty] || column > 7){
-            int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, chessBoard[line][column]));
-            if(a > 6 AND turn_counter % 2 EQ 1 OR a <= 6 AND turn_counter % 2 EQ 0){
+        if(board[line][column] NE piece_list[chess_pieces::Empty] || column > 7){
+            int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, board[line][column]));
+            if(a > 6 AND _mode EQ 1 OR a <= 6 AND _mode EQ 0){
                 pack.flag.capture_the_flag = true;
                 pack.destX      = line   ;
                 pack.destY      = column ;
-                list->push(pack);
+                _list->push(pack);
             }
             column = y;
             break;
         }
         pack.destX      = line   ;
         pack.destY      = column ;
-        list->push(pack);
+        _list->push(pack);
     }
 }
 
-void board::queen(int x, int y)
+void board::queen(int x, int y,safelist<chess_pack> *_list,int _mode,char board[8][8])
 {
     int column = y;
     for(int line = x-1;line BG 0; line--){
         column = column - 1;
-        if(chessBoard[line][column] NE piece_list[chess_pieces::Empty] || column < 0){
-            int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, chessBoard[line][column]));
-            if(a > 6 AND turn_counter % 2 EQ 1 OR a <= 6 AND turn_counter % 2 EQ 0){
+        if(board[line][column] NE piece_list[chess_pieces::Empty] || column < 0){
+            int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, board[line][column]));
+            if(a > 6 AND _mode EQ 1 OR a <= 6 AND _mode EQ 0){
                 pack.flag.capture_the_flag = true;
                 pack.destX      = line   ;
                 pack.destY      = column ;
-                list->push(pack);
+                _list->push(pack);
             }
             column = y;
             break;
         }
         pack.destX      = line   ;
         pack.destY      = column ;
-        list->push(pack);
+        _list->push(pack);
     }
     for(int line = x+1;line SM 7; line++){
         column = column + 1;
-        if(chessBoard[line][column] NE piece_list[chess_pieces::Empty] || column > 7){
-            int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, chessBoard[line][column]));
-            if(a > 6 AND turn_counter % 2 EQ 1 OR a <= 6 AND turn_counter % 2 EQ 0){
+        if(board[line][column] NE piece_list[chess_pieces::Empty] || column > 7){
+            int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, board[line][column]));
+            if(a > 6 AND _mode EQ 1 OR a <= 6 AND _mode EQ 0){
                 pack.flag.capture_the_flag = true;
                 pack.destX      = line   ;
                 pack.destY      = column ;
-                list->push(pack);
+                _list->push(pack);
             }
             column = y;
             break;
         }
         pack.destX      = line   ;
         pack.destY      = column ;
-        list->push(pack);
+        _list->push(pack);
     }
     for(int line = x+1;line SM 7; line++){
         column = column - 1;
-        if(chessBoard[line][column] NE piece_list[chess_pieces::Empty] || column < 0){
-            int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, chessBoard[line][column]));
-            if(a > 6 AND turn_counter % 2 EQ 1 OR a <= 6 AND turn_counter % 2 EQ 0){
+        if(board[line][column] NE piece_list[chess_pieces::Empty] || column < 0){
+            int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, board[line][column]));
+            if(a > 6 AND _mode EQ 1 OR a <= 6 AND _mode EQ 0){
                 pack.flag.capture_the_flag = true;
                 pack.destX      = line   ;
                 pack.destY      = column ;
-                list->push(pack);
+                _list->push(pack);
             }
             column = y;
             break;
         }
         pack.destX      = line   ;
         pack.destY      = column ;
-        list->push(pack);
+        _list->push(pack);
     }
     for(int line = x-1;line BG 0; line--){
         column = column + 1;
-        if(chessBoard[line][column] NE piece_list[chess_pieces::Empty] || column > 7){
-            int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, chessBoard[line][column]));
-            if(a > 6 AND turn_counter % 2 EQ 1 OR a <= 6 AND turn_counter % 2 EQ 0){
+        if(board[line][column] NE piece_list[chess_pieces::Empty] || column > 7){
+            int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, board[line][column]));
+            if(a > 6 AND _mode EQ 1 OR a <= 6 AND _mode EQ 0){
                 pack.flag.capture_the_flag = true;
                 pack.destX      = line   ;
                 pack.destY      = column ;
-                list->push(pack);
+                _list->push(pack);
             }
             column = y;
             break;
         }
         pack.destX      = line   ;
         pack.destY      = column ;
-        list->push(pack);
+        _list->push(pack);
     }
     for(int line=x-1;line BG 0;line--){
-        if(chessBoard[line][y]   NE piece_list[chess_pieces::Empty]){
-            int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, chessBoard[line][y]));
-            if(a > 6 AND turn_counter % 2 EQ 1 OR a <= 6 AND turn_counter % 2 EQ 0){
+        if(board[line][y]   NE piece_list[chess_pieces::Empty]){
+            int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, board[line][y]));
+            if(a > 6 AND _mode EQ 1 OR a <= 6 AND _mode EQ 0){
                 pack.flag.capture_the_flag = true;
                 pack.destX      = line   ;
                 pack.destY      = y ;
-                list->push(pack);
+                _list->push(pack);
 
             }
             break;
         }
         pack.destX      = line   ;
         pack.destY      = y      ;
-        list->push(pack);
+        _list->push(pack);
     }
     for(int line=x+1;line SM 7;line++){
-        if(chessBoard[line][y]   NE piece_list[chess_pieces::Empty]){
-            int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, chessBoard[line][y]));
-            if(a > 6 AND turn_counter % 2 EQ 1 OR a <= 6 AND turn_counter % 2 EQ 0){
+        if(board[line][y]   NE piece_list[chess_pieces::Empty]){
+            int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, board[line][y]));
+            if(a > 6 AND _mode EQ 1 OR a <= 6 AND _mode EQ 0){
                 pack.flag.capture_the_flag = true;
                 pack.destX      = line   ;
                 pack.destY      = y ;
-                list->push(pack);
+                _list->push(pack);
 
             }
             break;
         }
         pack.destX      = line   ;
         pack.destY      = y      ;
-        list->push(pack);
+        _list->push(pack);
     }
     for(int column=y-1;column BG 0;column--){
-        if(chessBoard[x][column] NE piece_list[chess_pieces::Empty]){
-            int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, chessBoard[x][column]));
-            if(a > 6 AND turn_counter % 2 EQ 1 OR a <= 6 AND turn_counter % 2 EQ 0){
+        if(board[x][column] NE piece_list[chess_pieces::Empty]){
+            int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, board[x][column]));
+            if(a > 6 AND _mode EQ 1 OR a <= 6 AND _mode EQ 0){
                 pack.flag.capture_the_flag = true;
                 pack.destX      = x   ;
                 pack.destY      = column ;
-                list->push(pack);
+                _list->push(pack);
             }
             break;
         }
         pack.destX      = x      ;
         pack.destY      = column ;
-        list->push(pack);
+        _list->push(pack);
     }
     for(int column=y+1;column SM 7;column++){
-        if(chessBoard[x][column] NE piece_list[chess_pieces::Empty]){
-            int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, chessBoard[x][column]));
-            if(a > 6 AND turn_counter % 2 EQ 1 OR a <= 6 AND turn_counter % 2 EQ 0){
+        if(board[x][column] NE piece_list[chess_pieces::Empty]){
+            int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, board[x][column]));
+            if(a > 6 AND _mode EQ 1 OR a <= 6 AND _mode EQ 0){
                 pack.flag.capture_the_flag = true;
                 pack.destX      = x   ;
                 pack.destY      = column ;
-                list->push(pack);
+                _list->push(pack);
             }
             break;
         }
         pack.destX      = x      ;
         pack.destY      = column ;
-        list->push(pack);
+        _list->push(pack);
     }
 }
 
-void board::king(int x, int y)
+void board::king(int x, int y,safelist<chess_pack> *_list,int _mode,char board[8][8])
 {
     QPoint ex_p(x,y);
-    if(chessBoard[x+1][y]   EQ piece_list[chess_pieces::Empty] && x+1 SM 7){
-        if(checkmate(mode::black,chessBoard,ex_p,QPoint(x+1,y))){
+    if(board[x+1][y]   EQ piece_list[chess_pieces::Empty] && x+1 SM 7){
+        if(checkmate(mode::black,board,ex_p,QPoint(x+1,y))){
             pack.destX      = x+1    ;
             pack.destY      = y      ;
-            list->push(pack);
+            _list->push(pack);
         }
     }
     else if(x+1 SM 7){
-        int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, chessBoard[x+1][y]));
-        if(a > 6 AND turn_counter % 2 EQ 1 OR a <= 6 AND turn_counter % 2 EQ 0){
+        int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, board[x+1][y]));
+        if(a > 6 AND _mode EQ 1 OR a <= 6 AND _mode EQ 0){
             pack.flag.capture_the_flag = true;
             pack.destX      = x+1    ;
             pack.destY      = y      ;
-            list->push(pack);
+            _list->push(pack);
         }
     }
-    if(chessBoard[x-1][y]   EQ piece_list[chess_pieces::Empty] && x-1 BG 0){
-        if(checkmate(mode::black,chessBoard,ex_p,QPoint(x-1,y))){
+    if(board[x-1][y]   EQ piece_list[chess_pieces::Empty] && x-1 BG 0){
+        if(checkmate(mode::black,board,ex_p,QPoint(x-1,y))){
             pack.destX      = x-1    ;
             pack.destY      = y      ;
-            list->push(pack);
+            _list->push(pack);
         }
     }
     else if(x-1 BG 0){
-        int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, chessBoard[x-1][y]));
-        if(a > 6 AND turn_counter % 2 EQ 1 OR a <= 6 AND turn_counter % 2 EQ 0){
+        int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, board[x-1][y]));
+        if(a > 6 AND _mode EQ 1 OR a <= 6 AND _mode EQ 0){
             pack.flag.capture_the_flag = true;
             pack.destX      = x-1    ;
             pack.destY      = y      ;
-            list->push(pack);
+            _list->push(pack);
         }
     }
-    if(chessBoard[x+1][y+1] EQ piece_list[chess_pieces::Empty] && x+1 SM 7 && y+1 SM 7){
-        if(checkmate(mode::black,chessBoard,ex_p,QPoint(x+1,y+1))){
+    if(board[x+1][y+1] EQ piece_list[chess_pieces::Empty] && x+1 SM 7 && y+1 SM 7){
+        if(checkmate(mode::black,board,ex_p,QPoint(x+1,y+1))){
             pack.destX      = x+1    ;
             pack.destY      = y+1    ;
-            list->push(pack);
+            _list->push(pack);
         }
     }
     else if(x+1 SM 7 && y+1 SM 7){
-        int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, chessBoard[x+1][y+1]));
-        if(a > 6 AND turn_counter % 2 EQ 1 OR a <= 6 AND turn_counter % 2 EQ 0){
+        int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, board[x+1][y+1]));
+        if(a > 6 AND _mode EQ 1 OR a <= 6 AND _mode EQ 0){
             pack.flag.capture_the_flag = true;
             pack.destX      = x+1    ;
             pack.destY      = y+1    ;
-            list->push(pack);
+            _list->push(pack);
         }
     }
-    if(chessBoard[x+1][y-1] EQ piece_list[chess_pieces::Empty] && x+1 SM 7 && y-1 BG 0){
-        if(checkmate(mode::black,chessBoard,ex_p,QPoint(x+1,y-1))){
+    if(board[x+1][y-1] EQ piece_list[chess_pieces::Empty] && x+1 SM 7 && y-1 BG 0){
+        if(checkmate(mode::black,board,ex_p,QPoint(x+1,y-1))){
             pack.destX      = x+1    ;
             pack.destY      = y-1    ;
-            list->push(pack);
+            _list->push(pack);
         }
     }
     else if(x+1 SM 7 && y-1 BG 7){
-        int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, chessBoard[x+1][y-1]));
-        if(a > 6 AND turn_counter % 2 EQ 1 OR a <= 6 AND turn_counter % 2 EQ 0){
+        int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, board[x+1][y-1]));
+        if(a > 6 AND _mode EQ 1 OR a <= 6 AND _mode EQ 0){
             pack.flag.capture_the_flag = true;
             pack.destX      = x+1    ;
             pack.destY      = y-1    ;
-            list->push(pack);
+            _list->push(pack);
         }
     }
-    if(chessBoard[x][y+1]   EQ piece_list[chess_pieces::Empty] && y+1 SM 7){
-        if(checkmate(mode::black,chessBoard,ex_p,QPoint(x,y+1))){
+    if(board[x][y+1]   EQ piece_list[chess_pieces::Empty] && y+1 SM 7){
+        if(checkmate(mode::black,board,ex_p,QPoint(x,y+1))){
             pack.destX      = x      ;
             pack.destY      = y+1    ;
-            list->push(pack);
+            _list->push(pack);
         }
     }
     else if(y+1 SM 7){
-        int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, chessBoard[x][y+1]));
-        if(a > 6 AND turn_counter % 2 EQ 1 OR a <= 6 AND turn_counter % 2 EQ 0){
+        int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, board[x][y+1]));
+        if(a > 6 AND _mode EQ 1 OR a <= 6 AND _mode EQ 0){
             pack.flag.capture_the_flag = true;
             pack.destX      = x      ;
             pack.destY      = y+1    ;
-            list->push(pack);
+            _list->push(pack);
         }
     }
-    if(chessBoard[x][y-1]   EQ piece_list[chess_pieces::Empty] && y-1 BG 0){
-        if(checkmate(mode::black,chessBoard,ex_p,QPoint(x,y-1))){
+    if(board[x][y-1]   EQ piece_list[chess_pieces::Empty] && y-1 BG 0){
+        if(checkmate(mode::black,board,ex_p,QPoint(x,y-1))){
             pack.destX      = x      ;
             pack.destY      = y-1    ;
-            list->push(pack);
+            _list->push(pack);
         }
     }
     else if(y-1 BG 0){
-        int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, chessBoard[x][y-1]));
-        if(a > 6 AND turn_counter % 2 EQ 1 OR a <= 6 AND turn_counter % 2 EQ 0){
+        int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, board[x][y-1]));
+        if(a > 6 AND _mode EQ 1 OR a <= 6 AND _mode EQ 0){
             pack.flag.capture_the_flag = true;
             pack.destX      = x      ;
             pack.destY      = y-1    ;
-            list->push(pack);
+            _list->push(pack);
         }
     }
-    if(chessBoard[x-1][y+1] EQ piece_list[chess_pieces::Empty] && x-1 BG 0 && y+1 SM 7){
-        if(checkmate(mode::black,chessBoard,ex_p,QPoint(x-1,y+1))){
+    if(board[x-1][y+1] EQ piece_list[chess_pieces::Empty] && x-1 BG 0 && y+1 SM 7){
+        if(checkmate(mode::black,board,ex_p,QPoint(x-1,y+1))){
             pack.destX      = x-1    ;
             pack.destY      = y+1    ;
-            list->push(pack);
+            _list->push(pack);
         }
     }
     else if(x-1 BG 0 && y+1 SM 7){
-        int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, chessBoard[x-1][y+1]));
-        if(a > 6 AND turn_counter % 2 EQ 1 OR a <= 6 AND turn_counter % 2 EQ 0){
+        int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, board[x-1][y+1]));
+        if(a > 6 AND _mode EQ 1 OR a <= 6 AND _mode EQ 0){
             pack.flag.capture_the_flag = true;
             pack.destX      = x-1    ;
             pack.destY      = y+1    ;
-            list->push(pack);
+            _list->push(pack);
         }
     }
-    if(chessBoard[x-1][y-1] EQ piece_list[chess_pieces::Empty] && x-1 BG 0 && y-1 BG 0){
-        if(checkmate(mode::black,chessBoard,ex_p,QPoint(x-1,y-1))){
+    if(board[x-1][y-1] EQ piece_list[chess_pieces::Empty] && x-1 BG 0 && y-1 BG 0){
+        if(checkmate(mode::black,board,ex_p,QPoint(x-1,y-1))){
             pack.destX      = x-1    ;
             pack.destY      = y-1    ;
-            list->push(pack);
+            _list->push(pack);
         }
     }
     else if(x-1 BG 0 && y-1 BG 0){
-        int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, chessBoard[x-1][y-1]));
-        if(a > 6 AND turn_counter % 2 EQ 1 OR a <= 6 AND turn_counter % 2 EQ 0){
+        int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, board[x-1][y-1]));
+        if(a > 6 AND _mode EQ 1 OR a <= 6 AND _mode EQ 0){
             pack.flag.capture_the_flag = true;
             pack.destX      = x-1    ;
             pack.destY      = y-1    ;
-            list->push(pack);
+            _list->push(pack);
         }
     }
     //    if(pack.flag.castling.K_flag EQ true AND pack.flag.castling.R1_flag EQ true){
@@ -765,88 +767,89 @@ void board::king(int x, int y)
     //    }
 }
 
-void board::whitePawn(int x, int y)
+void board::whitePawn(int x, int y,safelist<chess_pack> *_list,char board[8][8])
 {
-    if(chessBoard[x-1][y] EQ piece_list[chess_pieces::Empty]){
+
+    if(board[x-1][y] EQ piece_list[chess_pieces::Empty]){
         pack.destX      = x-1    ;
         pack.destY      = y      ;
-        list->push(pack);
+        _list->push(pack);
     }
-    if(chessBoard[x-2][y] EQ piece_list[chess_pieces::Empty] AND x EQ 6){
+    if(board[x-2][y] EQ piece_list[chess_pieces::Empty] AND board[x-1][y] EQ piece_list[chess_pieces::Empty] AND x EQ 6){
         pack.destX      = x-2    ;
         pack.destY      = y      ;
-        list->push(pack);
+        _list->push(pack);
     }
-    if(chessBoard[x-1][y+1] NE piece_list[chess_pieces::Empty]){
-        int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, chessBoard[x-1][y+1]));
+    if(board[x-1][y+1] NE piece_list[chess_pieces::Empty]){
+        int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, board[x-1][y+1]));
         if(a <= 6){
             pack.flag.capture_the_flag = true;
             pack.destX      = x-1;
             pack.destY      = y+1;
-            list->push(pack);
+            _list->push(pack);
         }
     }
-    if(chessBoard[x-1][y-1] NE piece_list[chess_pieces::Empty]){
-        int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, chessBoard[x-1][y-1]));
+    if(board[x-1][y-1] NE piece_list[chess_pieces::Empty]){
+        int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, board[x-1][y-1]));
         if(a <= 6){
             pack.flag.capture_the_flag = true;
             pack.destX      = x-1;
             pack.destY      = y-1;
-            list->push(pack);
+            _list->push(pack);
         }
     }
 }
 
-void board::blackPawn(int x, int y)
+void board::blackPawn(int x, int y,safelist<chess_pack> *_list,char board[8][8])
 {
-    if(chessBoard[x+1][y] EQ piece_list[chess_pieces::Empty]){
+    if(board[x+1][y] EQ piece_list[chess_pieces::Empty]){
         pack.destX      = x+1    ;
         pack.destY      = y      ;
-        list->push(pack);
+        _list->push(pack);
     }
-    if(chessBoard[x+2][y] EQ piece_list[chess_pieces::Empty] AND x EQ 1){
+    if(board[x+2][y] EQ piece_list[chess_pieces::Empty] AND board[x+1][y] EQ piece_list[chess_pieces::Empty] AND x EQ 1){
         pack.destX      = x+2    ;
         pack.destY      = y      ;
-        list->push(pack);
+        _list->push(pack);
     }
-    if(chessBoard[x+1][y+1] NE piece_list[chess_pieces::Empty]){
-        int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, chessBoard[x+1][y+1]));
+    if(board[x+1][y+1] NE piece_list[chess_pieces::Empty]){
+        int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, board[x+1][y+1]));
         if(a > 6 AND turn_counter % 2 EQ 1 OR a <= 6 AND turn_counter % 2 EQ 0){
             pack.flag.capture_the_flag = true;
             pack.destX      = x+1    ;
             pack.destY      = y+1    ;
-            list->push(pack);
+            _list->push(pack);
         }
     }
-    if(chessBoard[x+1][y-1] NE piece_list[chess_pieces::Empty]){
-        int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, chessBoard[x+1][y-1]));
+    if(board[x+1][y-1] NE piece_list[chess_pieces::Empty]){
+        int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, board[x+1][y-1]));
         if(a > 6 AND turn_counter % 2 EQ 1 OR a <= 6 AND turn_counter % 2 EQ 0){
             pack.flag.capture_the_flag = true;
             pack.destX      = x+1    ;
             pack.destY      = y-1    ;
-            list->push(pack);
+            _list->push(pack);
         }
     }
 }
 
-void board::getBoard(int m)
+void board::getBoard(int m,char board[8][8])
 {
     for(int h = 0; h<8; h++){
         for(int w = 0 ; w<8; w++){
-            if(chessBoard[h][w] NE '0'){
+            if(board[h][w] NE '0'){
                 chess_pack p;
                 p.destX = h;
                 p.destY = w;
-                p.name  = chessBoard[h][w];
+                p.name  = board[h][w];
                 switch (m) {
                 case mode::white:
-                    getWhiteMoves(p.name,p.destX,p.destY);
+                    getWhiteMoves(p.name,p.destX,p.destY,board);
                     break;
                 case mode::black:
-                    getBlackMoves(p.name,p.destX,p.destY);
+                    getBlackMoves(p.name,p.destX,p.destY,board);
                     break;
                 case mode::both:
-                    getMoves(p.name,p.destX,p.destY,mode::both);
+                    getMoves(p.name,p.destX,p.destY,mode::both,board);
                     break;
                 default:
                     break;
@@ -895,13 +898,13 @@ bool board::boardSimulate(QPoint ex_p, QPoint new_p, char board[8][8],int caslin
     }
 }
 
-void board::getMoves(char pieceName, int x, int y,int mode)
+void board::getMoves(char pieceName, int x, int y,int mode,char board[8][8])
 {
     if(mode EQ 0 OR mode EQ 2){
-        getWhiteMoves(pieceName,x,y);
+        getWhiteMoves(pieceName,x,y,board);
     }
     if(mode EQ 1 OR mode EQ 2){
-        getBlackMoves(pieceName,x,y);
+        getBlackMoves(pieceName,x,y,board);
     }
 
 }
@@ -1196,58 +1199,58 @@ bool board::check_endgame()
     return false;
 }
 
-void board::getBlackMoves(char pieceName, int x, int y)
+void board::getBlackMoves(char pieceName, int x, int y,char board[8][8])
 {
     pack.X = x;
     pack.Y = y;
     pack.name = pieceName;
     switch (pieceName) {
     case 'P':
-        blackPawn(x,y);
+        blackPawn(x,y,list,board);
         break;
     case 'R':
-        rook(x,y);
+        rook(x,y,list,mode::black,board);
         break;
     case 'N':
-        knight(x,y);
+        knight(x,y,list,mode::black,board);
         break;
     case 'B':
-        bishop(x,y);
+        bishop(x,y,list,mode::black,board);
         break;
     case 'Q':
-        queen(x,y);
+        queen(x,y,list,mode::black,board);
         break;
     case 'K':
-        king(x,y);
+        king(x,y,list,mode::black,board);
         break;
     default:
         break;
     }
 }
 
-void board::getWhiteMoves(char pieceName, int x, int y)
+void board::getWhiteMoves(char pieceName, int x, int y,char board[8][8])
 {
     pack.X = x;
     pack.Y = y;
     pack.name = pieceName;
     switch (pieceName) {
     case 'p':
-        whitePawn(x,y);
+        whitePawn(x,y,white_list,board);
         break;
     case 'r':
-        rook(x,y);
+        rook(x,y,white_list,mode::white,board);
         break;
     case 'n':
-        knight(x,y);
+        knight(x,y,white_list,mode::white,board);
         break;
     case 'b':
-        bishop(x,y);
+        bishop(x,y,white_list,mode::white,board);
         break;
     case 'q':
-        queen(x,y);
+        queen(x,y,white_list,mode::white,board);
         break;
     case 'k':
-        king(x,y);
+        king(x,y,white_list,mode::white,board);
         break;
     default:
         break;
@@ -1265,19 +1268,28 @@ void board::show_board()
     qDebug() << "\n      0" << "1" << "2" << "3" << "4" << "5" << "6" << "7";
 }
 
-bool board::check(QPoint ex_p, QPoint new_p,int mode)
+bool board::check(QPoint ex_p, QPoint new_p,int _mode)
 {
+    safelist<chess_pack> *_list_;
+    if(_mode EQ mode::white){
+        _list_ = white_list;
+    }
+    else if(_mode EQ mode::black){
+        _list_ = list;
+    }
+    qDebug() << "size: "  << _list_->size();
     char c = chessBoard[ex_p.x()][ex_p.y()];
-    getMoves(c,ex_p.x(),ex_p.y(),mode);
-    int list_size = list->size();
+    getMoves(c,ex_p.x(),ex_p.y(),_mode,chessBoard);
+    int list_size = _list_->size();
     for(int i = 0; i < list_size; i++){
-        list->pop(pack);
+        qDebug() << 7;
+        _list_->pop(pack);
         if(pack.destX EQ new_p.x() AND pack.destY EQ new_p.y()){
-            list->clearList();
+            _list_->clearList();
             return true;
         }
     }
-    list->clearList();
+    _list_->clearList();
     return false;
 }
 

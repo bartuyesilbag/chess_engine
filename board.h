@@ -11,39 +11,40 @@ class board: public QObject
 {
     Q_OBJECT
 public:
-    board(safelist<chess_pack> *_list, QObject *parent = 0);
+    board(safelist<chess_pack> *_list, safelist<chess_pack> *_white_list, QObject *parent = 0);
 
-    void whitePawn(int x, int y);
-    void blackPawn(int x, int y);
-    void rook(int x, int y)     ;
-    void knight(int y, int x)   ;
-    void bishop(int x, int y)   ;
-    void queen(int x, int y)    ;
-    void king(int x, int y)     ;
-    void getBoard(int mode)     ;
+    void whitePawn(int x, int y, safelist<chess_pack> *_list, char board[][8]);
+    void blackPawn(int x, int y, safelist<chess_pack> *_list, char board[][8]);
+    void rook     (int x, int y, safelist<chess_pack> *_list, int _mode, char board[][8]);
+    void knight   (int y, int x, safelist<chess_pack> *_list, int _mode, char board[][8]);
+    void bishop   (int x, int y, safelist<chess_pack> *_list, int _mode, char board[][8]);
+    void queen    (int x, int y, safelist<chess_pack> *_list, int _mode, char board[][8]);
+    void king     (int x, int y, safelist<chess_pack> *_list, int _mode, char board[][8]);
+    void getBoard (int mode, char board[][8]);
     bool boardSimulate(QPoint ex_p, QPoint new_p, char outStr[8][8], int casling_status = 0);
-    void getMoves(char pieceName, int x, int y, int mode);
+    void getMoves(char pieceName, int x, int y, int mode, char board[][8]);
 
     bool checkmate(int mode, char board[][8], QPoint ex_p = QPoint(10,10) , QPoint new_p = QPoint(10,10));
     bool check_endgame();
 
     int  getPiecesNumber()      ;
+    char chessBoard[8][8];
 private:
     void setup_board();
-    void getBlackMoves(char pieceName, int x, int y);
-    void getWhiteMoves(char pieceName, int x, int y);
+    void getBlackMoves(char pieceName, int x, int y, char board[][8]);
+    void getWhiteMoves(char pieceName, int x, int y, char board[][8]);
     void show_board();
     void help();
     void castling_conditions_check(QPoint ex_p);
 
     safelist<chess_pack> *list;
+    safelist<chess_pack> *white_list;
     chess_pack  pack;
     QPoint getKingPoint(char _board[][8], char piece);
 
-    char chessBoard[8][8];
     char piece_list[14] = {'0','P','R','N','B','Q','K','p','r','n','b','q','k'};
 
-    bool check(QPoint ex_p, QPoint new_p, int mode);
+    bool check(QPoint ex_p, QPoint new_p, int _mode);
 
     int ex_x(std::__cxx11::string s);
     int ex_y(std::__cxx11::string s);

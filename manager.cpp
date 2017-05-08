@@ -30,9 +30,10 @@ manager::~manager()
 void manager::start()
 {
     list = new safelist<chess_pack>();
-    b = new board(list);
+    white_list = new safelist<chess_pack>();
+    b = new board(list,white_list);
     c = new communicationBus();
-    m = new moveGenerator(list,b);
+    m = new moveGenerator(list,white_list,b);
     connect(b,SIGNAL(signal_from_board(int)),this,SLOT(turn_change(int)));
     connect(c,SIGNAL(signalFromComBus(QPoint,QPoint,std::string)),b,SLOT(slot_msg_to_board(QPoint,QPoint,std::string)));
     c->test();

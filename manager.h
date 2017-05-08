@@ -18,6 +18,7 @@ private:
     moveGenerator *m;
     board *b;
     safelist<chess_pack> *list;
+    safelist<chess_pack> *white_list;
     int turn_counter = 1;
 signals:
     void turnChangeWhite();

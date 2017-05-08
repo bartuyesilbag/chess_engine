@@ -13,30 +13,31 @@ public:
 
     void push(T t)
     {
-        list << t;
+        safe_list << t;
     }
 
     T at(int i){
-        return list.at(i);
+        return safe_list.at(i);
     }
 
     void pop(T & t)
     {
-        t = list.takeFirst();
+        t = safe_list.takeFirst();
     }
 
     int size()
     {
-        return list.size();
+        return safe_list.size();
     }
+
     void clearList()
     {
-        list.clear();
+        safe_list.clear();
     }
 
 
 private:
-    QList<T> list;
+    QList<T> safe_list;
 };
 
 #endif // SAFELIST_H
