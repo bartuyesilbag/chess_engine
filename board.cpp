@@ -27,10 +27,10 @@ void board::setup_board()
         }
     }
 
-    //    chessBoard[1][1]   = piece_list[chess_pieces::WhiteRook  ];
-    //    chessBoard[3][1]   = piece_list[chess_pieces::WhiteRook  ];
-    //    chessBoard[3][0]   = piece_list[chess_pieces::WhiteQueen ];
-    //    chessBoard[2][4]   = piece_list[chess_pieces::BlackKing  ];
+    //        chessBoard[1][1]   = piece_list[chess_pieces::WhiteRook  ];
+    //        chessBoard[3][1]   = piece_list[chess_pieces::WhiteRook  ];
+    //        chessBoard[3][0]   = piece_list[chess_pieces::WhiteQueen ];
+    //        chessBoard[0][7]   = piece_list[chess_pieces::BlackKing  ];
 
     //    chessBoard[realBoardHorizontal::five][realBoardVertical::h]   = piece_list[chess_pieces::WhitePawn ];
     //    chessBoard[realBoardHorizontal::one][realBoardVertical::h]   = piece_list[chess_pieces::WhiteKing ];

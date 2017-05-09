@@ -39,7 +39,7 @@ struct chess_pack{
 };
 
 struct score_pack{
-    QVector<int> score;
+    QVector<float> score;
     chess_pack   pack;
 };
 

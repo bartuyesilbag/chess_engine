@@ -13,11 +13,13 @@ public:
     moveGenerator(safelist<chess_pack> *_list, safelist<chess_pack> *_white_list, board *_b);
     ~moveGenerator();
 private:
-    void msgToBoard(QPoint ex_p, QPoint new_p);
-    void calculateBoard(char board[][8], int _mode, int count = 0);
-    int get_max(QVector<int> _scores);
-    void find_legal_white_moves(int count);
-    void fill_board(char _board[][8]);
+    void   msgToBoard(QPoint ex_p, QPoint new_p);
+    void   calculateBoard(char board[][8], int _mode, int count = 0);
+    float    get_max(QVector<float> _scores);
+    void   find_legal_white_moves(int count);
+    void   fill_board(char _board[][8]);
+    float    calculate_pieces_points(char _board[][8],int _mode);
+    float kings_landing(char _board[][8], int h, int w);
     QString black_move_to_screen(QPoint ex_p, QPoint new_p);
 
     chess_pack            pack;
