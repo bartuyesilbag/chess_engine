@@ -20,19 +20,19 @@ public:
     void bishop   (int x, int y, safelist<chess_pack> *_list, int _mode, char board[][8]);
     void queen    (int x, int y, safelist<chess_pack> *_list, int _mode, char board[][8]);
     void king     (int x, int y, safelist<chess_pack> *_list, int _mode, char board[][8]);
-    void getBoard (int mode, char board[][8]);
+    void getBoard (int mode, char board[][8], safelist<chess_pack> *_list);
     bool boardSimulate(QPoint ex_p, QPoint new_p, char outStr[8][8], int casling_status = 0);
-    void getMoves(char pieceName, int x, int y, int mode, char board[][8]);
+    void getMoves(char pieceName, int x, int y, int mode, char board[][8], safelist<chess_pack> *_list);
 
     bool checkmate(int mode, char board[][8], QPoint ex_p = QPoint(10,10) , QPoint new_p = QPoint(10,10));
     bool check_endgame();
-
+    QPoint getKingPoint(char _board[][8], char piece);
     int  getPiecesNumber()      ;
     char chessBoard[8][8];
 private:
     void setup_board();
-    void getBlackMoves(char pieceName, int x, int y, char board[][8]);
-    void getWhiteMoves(char pieceName, int x, int y, char board[][8]);
+    void getBlackMoves(char pieceName, int x, int y, char board[][8], safelist<chess_pack> *_list);
+    void getWhiteMoves(char pieceName, int x, int y, char board[][8], safelist<chess_pack> *_list);
     void show_board();
     void help();
     void castling_conditions_check(QPoint ex_p);
@@ -40,7 +40,7 @@ private:
     safelist<chess_pack> *list;
     safelist<chess_pack> *white_list;
     chess_pack  pack;
-    QPoint getKingPoint(char _board[][8], char piece);
+
 
     char piece_list[14] = {'0','P','R','N','B','Q','K','p','r','n','b','q','k'};
 

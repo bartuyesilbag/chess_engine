@@ -28,8 +28,8 @@ moveGenerator::~moveGenerator()
 void moveGenerator::findLegalBlackMoves()
 {
     char _board[8][8];
-    fill_board(_board);
-    b->getBoard(1,_board);
+    fill_board(_board,b->chessBoard);
+    b->getBoard(1,_board,list);
     int listSize = list->size();
     for(int i = 0; i < listSize;i++){
         if(b->boardSimulate(QPoint(list->at(i).X,list->at(i).Y),QPoint(list->at(i).destX,list->at(i).destY),_board,list->at(i).flag.castling.cast_stat)){
@@ -57,9 +57,9 @@ void moveGenerator::findLegalBlackMoves()
     new_p = QPoint(list->at(index_of).destX,list->at(index_of).destY);
     qDebug() << black_move_to_screen(ex_p,new_p);
     list->clearList();
+    qDebug() << general_pack.score;
     general_pack.score.clear();
     b->slot_msg_to_board(ex_p,new_p,"aaaa");
-
     //    //int index_of = general_pack.score.indexOf(get_max(general_pack.score));
     //    qDebug() << general_pack.score;
     //    qDebug() << "size of vector: " << general_pack.score.size() << "size of list before clear: " << list->size();
@@ -73,8 +73,8 @@ void moveGenerator::findLegalBlackMoves()
 void moveGenerator::find_legal_white_moves(int count)
 {
     char white_board[8][8];
-    fill_board(white_board);
-    b->getBoard(0,white_board);
+    fill_board(white_board,b->chessBoard);
+    b->getBoard(0,white_board,white_list);
     int listSize = white_list->size();
     for(int i = 0; i < listSize;i++){
         white_list->pop(pack);
@@ -87,16 +87,38 @@ void moveGenerator::find_legal_white_moves(int count)
 
 void moveGenerator::calculateBoard(char board[8][8], int _mode,int count)
 {
-    float pieces_point = calculate_pieces_points(board,_mode);
+    char _board[8][8];
+    float total_score,pieces_score,mobility_score,king_score,center_control_score,next_move_score,w1,w2,w3,w4,w5;
+    safelist<chess_pack> temp_list;
+    w1 = 1; w2 = 0.2; w3 = 0.6; w4 = 0.3; w5 = 0.25;
+    int weights[5] = {w1,w2,w3,w4,w5};
+
+    fill_board(_board,board);
+    b->getBoard(_mode,_board,&temp_list);
+
+    //calculate points
+
+    pieces_score         = pieces_points(board,_mode);
+
+    mobility_score       = (float)temp_list.size();
+
+    king_score           = kings_landing(board,_mode);
+
+    center_control_score = center_control(board);
+
+    next_move_score      = next_move(_board,_mode,weights);
+
+    total_score = w1*pieces_score + w2*mobility_score + w3*king_score + w4*center_control_score + w5*next_move_score;
+
     if(_mode EQ mode::black){
-        //int v1 = std::rand() % 100 + 1;
-        black_pack.score.push_back(pieces_point);
+        black_pack.score.push_back(total_score);
     }
     else{
-        //int v2 = std::rand() % 100 + 1;
-        //white_pack.score.push_back(pieces_point);
-        white_pack.score.push_back(black_pack.score.at(count)-pieces_point);
+        white_pack.score.push_back(black_pack.score.at(count)-total_score);
     }
+    //qDebug() << "_mode: " << _mode << "pieces_score: " << pieces_score << "mobility_score: "
+    //         << mobility_score << "king_score: " << king_score << "center_control_score: "
+    //         << center_control_score << "next_move_score: " << next_move_score;
 }
 
 float moveGenerator::get_max(QVector<float> _scores)
@@ -104,8 +126,6 @@ float moveGenerator::get_max(QVector<float> _scores)
     int max = *std::max_element(_scores.begin(), _scores.end());
     return max;
 }
-
-
 
 QString moveGenerator::black_move_to_screen(QPoint ex_p, QPoint new_p)
 {
@@ -119,25 +139,29 @@ QString moveGenerator::black_move_to_screen(QPoint ex_p, QPoint new_p)
     return move;
 }
 
-void moveGenerator::fill_board(char _board[8][8])
+void moveGenerator::fill_board(char _board[8][8],char chessboard[8][8])
 {
     for(int h = 0; h<8; h++){
         for(int w = 0 ; w<8; w++){
-            _board[h][w] = b->chessBoard[h][w];
+            _board[h][w] = chessboard[h][w];
         }
     }
 }
 
-float moveGenerator::calculate_pieces_points(char _board[8][8], int _mode)
+float moveGenerator::pieces_points(char _board[8][8], int _mode)
 {
-    float point = 0;
-    float king_slayer = 0;
+    float point          = 0;
+    float doubled_pawns  = 0;
+    float isolated_pawns = 0;
     for(int h = 0; h<8; h++){
         for(int w = 0 ; w<8; w++){
             if(_mode EQ mode::black){
                 switch (_board[h][w]) {
                 case 'P':
                     point += 1;
+                    doubled_pawns  += _board[h+1][w] EQ 'P' ? 1 : 0;
+                    isolated_pawns += _board[h][w+1] EQ 'P' ? 0.5 : 0;
+                    isolated_pawns += _board[h][w-1] EQ 'P' ? 0.5 : 0;
                     break;
                 case 'R':
                     point += 5;
@@ -152,7 +176,7 @@ float moveGenerator::calculate_pieces_points(char _board[8][8], int _mode)
                     point += 9;
                     break;
                 case 'K':
-                    king_slayer += kings_landing(_board,h,w);
+                    point += 200;
                     break;
                 default:
                     break;
@@ -162,6 +186,9 @@ float moveGenerator::calculate_pieces_points(char _board[8][8], int _mode)
                 switch (_board[h][w]) {
                 case 'p':
                     point += 1;
+                    doubled_pawns  += _board[h-1][w] EQ 'p' ? 1 :0;
+                    isolated_pawns += _board[h][w+1] EQ 'p' ? 0.5 : 0;
+                    isolated_pawns += _board[h][w-1] EQ 'p' ? 0.5 : 0;
                     break;
                 case 'r':
                     point += 5;
@@ -176,7 +203,7 @@ float moveGenerator::calculate_pieces_points(char _board[8][8], int _mode)
                     point += 9;
                     break;
                 case 'k':
-                    king_slayer += kings_landing(_board,h,w);
+                    point += 200;
                     break;
                 default:
                     break;
@@ -185,27 +212,71 @@ float moveGenerator::calculate_pieces_points(char _board[8][8], int _mode)
             }
         }
     }
-    return point + 0.3*king_slayer;
+    return point + 0.5*doubled_pawns + 0.5*isolated_pawns;
 }
 
-float moveGenerator::kings_landing(char _board[8][8], int h, int w)
+float moveGenerator::center_control(char _board[8][8])
 {
-    float _point = 0;
+    float _score = 0;
+    char piece_list[14] = {'0','P','R','N','B','Q','K','p','r','n','b','q','k'};
+    for(int i = 3; i<=4;i++){
+        for(int j = 3; j<=4;j++){
+            int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, _board[i][j]));
+            //qDebug() << a;
+            if(a > 6){
+               _score  += -1;
+            }
+            else if(a > 0 AND a <= 6){
+                _score += 1;
+            }
+        }
+    }
+    return _score;
+}
+
+float moveGenerator::next_move(char _board[8][8], int _mode,int _weight[5])
+{
+    float _score = 0;
+    float pieces_score;
+    float king_score;
+    float center_control_score;
+
+
+    pieces_score         = pieces_points(_board,_mode);
+
+    king_score           = kings_landing(_board,_mode);
+
+    center_control_score = center_control(_board);
+
+
+    _score = _weight[0]*pieces_score + _weight[1]*king_score + _weight[2]*center_control_score;
+    return _score;
+}
+
+float moveGenerator::kings_landing(char _board[8][8],int _mode)
+{
+    float _score = 0;
+    char piece = _mode EQ mode::black ? 'K' : 'k';
+    QPoint kings_point = b->getKingPoint(_board,piece);
+
+    int h = kings_point.x();
+    int w = kings_point.y();
+
     if(h-1 BG 0 AND w-1 BG 0)
-        _point += _board[h-1][w-1] NE '0' ? 1 : 0;
+        _score += _board[h-1][w-1] NE '0' ? 1 : 0;
     if(h-1 BG 0)
-        _point += _board[h-1][w]   NE '0' ? 1 : 0;
+        _score += _board[h-1][w]   NE '0' ? 1 : 0;
     if(h-1 BG 0 AND w+1 SM 7)
-        _point += _board[h-1][w+1] NE '0' ? 1 : 0;
+        _score += _board[h-1][w+1] NE '0' ? 1 : 0;
     if(w-1 BG 0)
-        _point += _board[h][w-1]   NE '0' ? 1 : 0;
+        _score += _board[h][w-1]   NE '0' ? 1 : 0;
     if(w+1 SM 7)
-        _point += _board[h][w+1]   NE '0' ? 1 : 0;
+        _score += _board[h][w+1]   NE '0' ? 1 : 0;
     if(h+1 SM 7 AND w-1 BG 0)
-        _point += _board[h+1][w-1] NE '0' ? 1 : 0;
+        _score += _board[h+1][w-1] NE '0' ? 1 : 0;
     if(h+1 SM 7)
-        _point += _board[h+1][w]   NE '0' ? 1 : 0;
+        _score += _board[h+1][w]   NE '0' ? 1 : 0;
     if(h+1 SM 7 AND w+1 SM 7)
-        _point += _board[h+1][w+1] NE '0' ? 1 : 0;
-    return _point;
+        _score += _board[h+1][w+1] NE '0' ? 1 : 0;
+    return _score;
 }

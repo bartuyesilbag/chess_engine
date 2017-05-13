@@ -832,7 +832,7 @@ void board::blackPawn(int x, int y,safelist<chess_pack> *_list,char board[8][8])
     }
 }
 
-void board::getBoard(int m,char board[8][8])
+void board::getBoard(int m,char board[8][8],safelist<chess_pack> *_list)
 {
     for(int h = 0; h<8; h++){
         for(int w = 0 ; w<8; w++){
@@ -843,13 +843,13 @@ void board::getBoard(int m,char board[8][8])
                 p.name  = board[h][w];
                 switch (m) {
                 case mode::white:
-                    getWhiteMoves(p.name,p.destX,p.destY,board);
+                    getWhiteMoves(p.name,p.destX,p.destY,board,_list);
                     break;
                 case mode::black:
-                    getBlackMoves(p.name,p.destX,p.destY,board);
+                    getBlackMoves(p.name,p.destX,p.destY,board,_list);
                     break;
                 case mode::both:
-                    getMoves(p.name,p.destX,p.destY,mode::both,board);
+                    getMoves(p.name,p.destX,p.destY,mode::both,board,_list);
                     break;
                 default:
                     break;
@@ -898,13 +898,13 @@ bool board::boardSimulate(QPoint ex_p, QPoint new_p, char board[8][8],int caslin
     }
 }
 
-void board::getMoves(char pieceName, int x, int y,int mode,char board[8][8])
+void board::getMoves(char pieceName, int x, int y,int mode,char board[8][8],safelist<chess_pack> *_list)
 {
     if(mode EQ 0 OR mode EQ 2){
-        getWhiteMoves(pieceName,x,y,board);
+        getWhiteMoves(pieceName,x,y,board,_list);
     }
     if(mode EQ 1 OR mode EQ 2){
-        getBlackMoves(pieceName,x,y,board);
+        getBlackMoves(pieceName,x,y,board,_list);
     }
 
 }
@@ -1199,58 +1199,58 @@ bool board::check_endgame()
     return false;
 }
 
-void board::getBlackMoves(char pieceName, int x, int y,char board[8][8])
+void board::getBlackMoves(char pieceName, int x, int y,char board[8][8],safelist<chess_pack> *_list)
 {
     pack.X = x;
     pack.Y = y;
     pack.name = pieceName;
     switch (pieceName) {
     case 'P':
-        blackPawn(x,y,list,board);
+        blackPawn(x,y,_list,board);
         break;
     case 'R':
-        rook(x,y,list,mode::black,board);
+        rook(x,y,_list,mode::black,board);
         break;
     case 'N':
-        knight(x,y,list,mode::black,board);
+        knight(x,y,_list,mode::black,board);
         break;
     case 'B':
-        bishop(x,y,list,mode::black,board);
+        bishop(x,y,_list,mode::black,board);
         break;
     case 'Q':
-        queen(x,y,list,mode::black,board);
+        queen(x,y,_list,mode::black,board);
         break;
     case 'K':
-        king(x,y,list,mode::black,board);
+        king(x,y,_list,mode::black,board);
         break;
     default:
         break;
     }
 }
 
-void board::getWhiteMoves(char pieceName, int x, int y,char board[8][8])
+void board::getWhiteMoves(char pieceName, int x, int y,char board[8][8],safelist<chess_pack> *_list)
 {
     pack.X = x;
     pack.Y = y;
     pack.name = pieceName;
     switch (pieceName) {
     case 'p':
-        whitePawn(x,y,white_list,board);
+        whitePawn(x,y,_list,board);
         break;
     case 'r':
-        rook(x,y,white_list,mode::white,board);
+        rook(x,y,_list,mode::white,board);
         break;
     case 'n':
-        knight(x,y,white_list,mode::white,board);
+        knight(x,y,_list,mode::white,board);
         break;
     case 'b':
-        bishop(x,y,white_list,mode::white,board);
+        bishop(x,y,_list,mode::white,board);
         break;
     case 'q':
-        queen(x,y,white_list,mode::white,board);
+        queen(x,y,_list,mode::white,board);
         break;
     case 'k':
-        king(x,y,white_list,mode::white,board);
+        king(x,y,_list,mode::white,board);
         break;
     default:
         break;
@@ -1278,7 +1278,7 @@ bool board::check(QPoint ex_p, QPoint new_p,int _mode)
         _list_ = list;
     }
     char c = chessBoard[ex_p.x()][ex_p.y()];
-    getMoves(c,ex_p.x(),ex_p.y(),_mode,chessBoard);
+    getMoves(c,ex_p.x(),ex_p.y(),_mode,chessBoard,_list_);
     int list_size = _list_->size();
     for(int i = 0; i < list_size; i++){
         _list_->pop(pack);
