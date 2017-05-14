@@ -7,7 +7,8 @@ Proje C++ dili ile QT Framework kullanılarak QtCreator IDE'sinde yazılmıştı
 
 Programın Kullanışı ise şu şekildedir
 
-COMMANDS---------------------------------
+COMMANDS
+   
    show chessboard - board                  
    show turn count - turn?                  
    restart game    - restart                
@@ -15,4 +16,5 @@ COMMANDS---------------------------------
    quit game       - quit                   
   
 OYNANIŞ
+
    Oyun başladığında hamle yapmak için oynatılmak istenin taşın ilk ve son koordinatı girilmelidir. Örneğin 'h2h4' yazılırsa, oyun başında h2'de bulunan piyon h4'e hareket eder.    
