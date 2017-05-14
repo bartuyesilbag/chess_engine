@@ -21,7 +21,11 @@ private:
     float  pieces_points(char _board[][8],int _mode);
     float  kings_landing(char _board[][8], int _mode);
     float  center_control(char _board[][8]);
-    float  next_move(char _board[][8] , int _mode, int _weight[5]);
+    float  next_move(char _board[][8] , int _mode, float w1 = 0, float w2 = 0, float w3 = 0, float w4 = 0, float w5 = 0, float w6 = 0, float w7 = 0, float w8 = 0);
+    float  extended_center(char _board[][8]);
+    float  doubled_pieces(char _board[][8], int _mode);
+    float  piece_square_table(char _board[][8], int _mode);
+    float square_tables(char piece, int h, int w, int _mode);
     QString black_move_to_screen(QPoint ex_p, QPoint new_p);
 
     chess_pack            pack;

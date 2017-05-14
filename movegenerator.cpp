@@ -42,7 +42,7 @@ void moveGenerator::findLegalBlackMoves()
             general_pack.score.push_back(-10000);
         }
     }
-    int max   = get_max(general_pack.score);
+    float max   = get_max(general_pack.score);
     int count = std::count (general_pack.score.begin(), general_pack.score.end(),max);
     int index_of;
     if(count EQ 1){
@@ -88,28 +88,42 @@ void moveGenerator::find_legal_white_moves(int count)
 void moveGenerator::calculateBoard(char board[8][8], int _mode,int count)
 {
     char _board[8][8];
-    float total_score,pieces_score,mobility_score,king_score,center_control_score,next_move_score,w1,w2,w3,w4,w5;
+    float total_score,pieces_score,mobility_score,king_score,center_control_score,
+            next_move_score,extended_center_score,doubled_pieces_score,piece_square_score,w1,w2,w3,w4,w5,w6,w7,w8;
     safelist<chess_pack> temp_list;
-    w1 = 1; w2 = 0.2; w3 = 0.6; w4 = 0.3; w5 = 0.25;
-    int weights[5] = {w1,w2,w3,w4,w5};
+    w1 = 10; w2 = 0.2; w3 = 0.6; w4 = 0.3; w5 = 0.25; w6 = 0.125; w7 = 0.25; w8 = 0.1;
+
 
     fill_board(_board,board);
     b->getBoard(_mode,_board,&temp_list);
 
     //calculate points
 
-    pieces_score         = pieces_points(board,_mode);
+    pieces_score          = pieces_points(board,_mode);
 
-    mobility_score       = (float)temp_list.size();
+    mobility_score        = (float)temp_list.size();
 
-    king_score           = kings_landing(board,_mode);
+    king_score            = kings_landing(board,_mode);
 
-    center_control_score = center_control(board);
+    center_control_score  = center_control(board);
 
-    next_move_score      = next_move(_board,_mode,weights);
+    next_move_score       = next_move(_board,_mode,w1,w2,w3,0,0,w6,w7,w8);
 
-    total_score = w1*pieces_score + w2*mobility_score + w3*king_score + w4*center_control_score + w5*next_move_score;
+    extended_center_score = extended_center(board);
 
+    doubled_pieces_score  = doubled_pieces(board,_mode);
+
+    piece_square_score    = piece_square_table(board,_mode);
+
+
+    total_score = w1*pieces_score          +
+                  w2*mobility_score        +
+                  w3*king_score            +
+                  w4*center_control_score  +
+                  w5*next_move_score       +
+                  w6*extended_center_score +
+                  w7*doubled_pieces_score  +
+                  w8*piece_square_score;
     if(_mode EQ mode::black){
         black_pack.score.push_back(total_score);
     }
@@ -123,7 +137,8 @@ void moveGenerator::calculateBoard(char board[8][8], int _mode,int count)
 
 float moveGenerator::get_max(QVector<float> _scores)
 {
-    int max = *std::max_element(_scores.begin(), _scores.end());
+
+    float max = *std::max_element(_scores.begin(), _scores.end());
     return max;
 }
 
@@ -147,6 +162,8 @@ void moveGenerator::fill_board(char _board[8][8],char chessboard[8][8])
         }
     }
 }
+
+//evaluation function
 
 float moveGenerator::pieces_points(char _board[8][8], int _mode)
 {
@@ -212,7 +229,7 @@ float moveGenerator::pieces_points(char _board[8][8], int _mode)
             }
         }
     }
-    return point + 0.5*doubled_pawns + 0.5*isolated_pawns;
+    return point - 0.5*doubled_pawns - 0.5*isolated_pawns;
 }
 
 float moveGenerator::center_control(char _board[8][8])
@@ -224,7 +241,7 @@ float moveGenerator::center_control(char _board[8][8])
             int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, _board[i][j]));
             //qDebug() << a;
             if(a > 6){
-               _score  += -1;
+                _score  += -1;
             }
             else if(a > 0 AND a <= 6){
                 _score += 1;
@@ -234,23 +251,275 @@ float moveGenerator::center_control(char _board[8][8])
     return _score;
 }
 
-float moveGenerator::next_move(char _board[8][8], int _mode,int _weight[5])
+float moveGenerator::next_move(char _board[8][8], int _mode,float w1,float w2,float w3,float w4,float w5,float w6,float w7,float w8)
 {
     float _score = 0;
     float pieces_score;
     float king_score;
     float center_control_score;
+    float extended_center_score;
+    float doubled_pieces_score;
+    float piece_square_score;
+
+    pieces_score          = pieces_points(_board,_mode);
+
+    king_score            = kings_landing(_board,_mode);
+
+    center_control_score  = center_control(_board);
+
+    extended_center_score = extended_center(_board);
+
+    doubled_pieces_score  = doubled_pieces(_board,_mode);
+
+    piece_square_score    = piece_square_table(_board,_mode);
 
 
-    pieces_score         = pieces_points(_board,_mode);
+    _score = w1*pieces_score          +
+             w2*king_score            +
+             w3*center_control_score  +
+             w6*extended_center_score +
+             w7*doubled_pieces_score  +
+             w8*piece_square_score + w4 + w5;
 
-    king_score           = kings_landing(_board,_mode);
-
-    center_control_score = center_control(_board);
-
-
-    _score = _weight[0]*pieces_score + _weight[1]*king_score + _weight[2]*center_control_score;
     return _score;
+}
+
+float moveGenerator::extended_center(char _board[8][8])
+{
+    float _score = 0;
+    char piece_list[14] = {'0','P','R','N','B','Q','K','p','r','n','b','q','k'};
+    for(int i = 2; i<=5;i++){
+        for(int j = 2; j<=5;j++){
+            int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, _board[i][j]));
+            //qDebug() << a;
+            if(a > 6){
+                _score  += -1;
+            }
+            else if(a > 0 AND a <= 6){
+                _score += 1;
+            }
+        }
+    }
+    return _score;
+
+}
+
+float moveGenerator::doubled_pieces(char _board[8][8], int _mode)
+{
+    float _score = 0;
+    char bishop = _mode EQ mode::black ? 'B' : 'b';
+    char knight = _mode EQ mode::black ? 'N' : 'n';
+
+    for(int i = 0; i<=7;i++){
+        for(int j = 0; j<=7;j++){
+            if(_board[i][j] EQ (bishop OR knight)){
+                _score += 1;
+            }
+        }
+    }
+    return _score;
+}
+
+float moveGenerator::piece_square_table(char _board[8][8], int _mode)
+{
+    float _score = 0;
+
+    for(int i = 0; i<=7;i++){
+        for(int j = 0; j<=7;j++){
+            if(_board[i][j] NE '0'){
+                _score += square_tables(_board[i][j],i,j,_mode);
+            }
+        }
+    }
+
+    return _score;
+}
+
+float moveGenerator::square_tables(char piece,int h,int w,int _mode)
+{
+
+    float _score;
+
+    int white_pawn_board[8][8]      =  {{0,  0,  0,  0,  0,  0,  0,  0 },
+                                        {50, 50, 50, 50, 50, 50, 50, 50},
+                                        {10, 10, 20, 30, 30, 20, 10, 10},
+                                        { 5,  5, 10, 25, 25, 10,  5,  5},
+                                        { 0,  0,  0, 20, 20,  0,  0,  0},
+                                        { 5, -5,-10,  0,  0,-10, -5,  5},
+                                        { 5, 10, 10,-20,-20, 10, 10,  5},
+                                        { 0,  0,  0,  0,  0,  0,  0,  0}};
+
+    int black_pawn_board[8][8]      =  {{0,  0,  0,  0,  0,  0,  0,  0 },
+                                        { 5, 10, 10,-20,-20, 10, 10,  5},
+                                        { 5, -5,-10,  0,  0,-10, -5,  5},
+                                        { 0,  0,  0, 20, 20,  0,  0,  0},
+                                        { 5,  5, 10, 25, 25, 10,  5,  5},
+                                        {10, 10, 20, 30, 30, 20, 10, 10},
+                                        {50, 50, 50, 50, 50, 50, 50, 50},
+                                        { 0,  0,  0,  0,  0,  0,  0,  0}};
+
+    int white_knight_board[8][8]    = {{-50,-40,-30,-30,-30,-30,-40,-50},
+                                       {-40,-20,  0,  0,  0,  0,-20,-40},
+                                       {-30,  0, 10, 15, 15, 10,  0,-30},
+                                       {-30,  5, 15, 20, 20, 15,  5,-30},
+                                       {-30,  0, 15, 20, 20, 15,  0,-30},
+                                       {-30,  5, 10, 15, 15, 10,  5,-30},
+                                       {-40,-20,  0,  5,  5,  0,-20,-40},
+                                       {-50,-40,-30,-30,-30,-30,-40,-50}};
+
+    int black_knight_board[8][8]    = {{-50,-40,-30,-30,-30,-30,-40,-50},
+                                       {-40,-20,  0,  5,  5,  0,-20,-40},
+                                       {-30,  5, 10, 15, 15, 10,  5,-30},
+                                       {-30,  0, 15, 20, 20, 15,  0,-30},
+                                       {-30,  5, 15, 20, 20, 15,  5,-30},
+                                       {-30,  0, 10, 15, 15, 10,  0,-30},
+                                       {-40,-20,  0,  0,  0,  0,-20,-40},
+                                       {-50,-40,-30,-30,-30,-30,-40,-50}};
+
+
+    int white_bishop_board[8][8]    = {{-20,-10,-10,-10,-10,-10,-10,-20},
+                                       {-10,  0,  0,  0,  0,  0,  0,-10},
+                                       {-10,  0,  5, 10, 10,  5,  0,-10},
+                                       {-10,  5,  5, 10, 10,  5,  5,-10},
+                                       {-10,  0, 10, 10, 10, 10,  0,-10},
+                                       {-10, 10, 10, 10, 10, 10, 10,-10},
+                                       {-10,  5,  0,  0,  0,  0,  5,-10},
+                                       {-20,-10,-10,-10,-10,-10,-10,-20}};
+
+    int black_bishop_board[8][8]    = {{-20,-10,-10,-10,-10,-10,-10,-20},
+                                       {-10,  5,  0,  0,  0,  0,  5,-10},
+                                       {-10, 10, 10, 10, 10, 10, 10,-10},
+                                       {-10,  0, 10, 10, 10, 10,  0,-10},
+                                       {-10,  5,  5, 10, 10,  5,  5,-10},
+                                       {-10,  0,  5, 10, 10,  5,  0,-10},
+                                       {-10,  0,  0,  0,  0,  0,  0,-10},
+                                       {-20,-10,-10,-10,-10,-10,-10,-20}};
+
+    int white_rook_board[8][8]      = {{  0,  0,  0,  0,  0,  0,  0,  0},
+                                       {  5, 10, 10, 10, 10, 10, 10,  5},
+                                       { -5,  0,  0,  0,  0,  0,  0, -5},
+                                       { -5,  0,  0,  0,  0,  0,  0, -5},
+                                       { -5,  0,  0,  0,  0,  0,  0, -5},
+                                       { -5,  0,  0,  0,  0,  0,  0, -5},
+                                       { -5,  0,  0,  0,  0,  0,  0, -5},
+                                       {  0,  0,  0,  5,  5,  0,  0,  0}};
+
+    int black_rook_board[8][8]      = {{  0,  0,  0,  5,  5,  0,  0,  0},
+                                       { -5,  0,  0,  0,  0,  0,  0, -5},
+                                       { -5,  0,  0,  0,  0,  0,  0, -5},
+                                       { -5,  0,  0,  0,  0,  0,  0, -5},
+                                       { -5,  0,  0,  0,  0,  0,  0, -5},
+                                       { -5,  0,  0,  0,  0,  0,  0, -5},
+                                       {  5, 10, 10, 10, 10, 10, 10,  5},
+                                       {  0,  0,  0,  0,  0,  0,  0,  0}};
+
+    int white_queen_board[8][8]     = {{-20,-10,-10, -5, -5,-10,-10,-20},
+                                       {-10,  0,  0,  0,  0,  0,  0,-10},
+                                       {-10,  0,  5,  5,  5,  5,  0,-10},
+                                       { -5,  0,  5,  5,  5,  5,  0, -5},
+                                       {  0,  0,  5,  5,  5,  5,  0, -5},
+                                       {-10,  5,  5,  5,  5,  5,  0,-10},
+                                       {-10,  0,  5,  0,  0,  0,  0,-10},
+                                       {-20,-10,-10, -5, -5,-10,-10,-20}};
+
+    int black_queen_board[8][8]     = {{-20,-10,-10, -5, -5,-10,-10,-20},
+                                       {-10,  0,  0,  0,  0,  5,  0,-10},
+                                       {-10,  5,  5,  5,  5,  5,  0,-10},
+                                       {  0,  0,  5,  5,  5,  5,  0, -5},
+                                       { -5,  0,  5,  5,  5,  5,  0, -5},
+                                       {-10,  0,  5,  5,  5,  5,  0,-10},
+                                       {-10,  0,  0,  0,  0,  0,  0,-10},
+                                       {-20,-10,-10, -5, -5,-10,-10,-20}};
+
+    int white_kingM_board[8][8]    = {{-30,-40,-40,-50,-50,-40,-40,-30},
+                                      {-30,-40,-40,-50,-50,-40,-40,-30},
+                                      {-30,-40,-40,-50,-50,-40,-40,-30},
+                                      {-30,-40,-40,-50,-50,-40,-40,-30},
+                                      {-20,-30,-30,-40,-40,-30,-30,-20},
+                                      {-10,-20,-20,-20,-20,-20,-20,-10},
+                                      { 20, 20,  0,  0,  0,  0, 20, 20},
+                                      { 20, 30, 10,  0,  0, 10, 30, 20}};
+
+    int black_kingM_board[8][8]    = {{ 20, 30, 10,  0,  0, 10, 30, 20},
+                                      { 20, 20,  0,  0,  0,  0, 20, 20},
+                                      {-10,-20,-20,-20,-20,-20,-20,-10},
+                                      {-20,-30,-30,-40,-40,-30,-30,-20},
+                                      {-30,-40,-40,-50,-50,-40,-40,-30},
+                                      {-30,-40,-40,-50,-50,-40,-40,-30},
+                                      {-30,-40,-40,-50,-50,-40,-40,-30},
+                                      {-30,-40,-40,-50,-50,-40,-40,-30}};
+
+    int white_kingE_board[8][8]    = {{-50,-40,-30,-20,-20,-30,-40,-50},
+                                      {-30,-20,-10,  0,  0,-10,-20,-30},
+                                      {-30,-10, 20, 30, 30, 20,-10,-30},
+                                      {-30,-10, 30, 40, 40, 30,-10,-30},
+                                      {-30,-10, 30, 40, 40, 30,-10,-30},
+                                      {-30,-10, 20, 30, 30, 20,-10,-30},
+                                      {-30,-30,  0,  0,  0,  0,-30,-30},
+                                      {-50,-30,-30,-30,-30,-30,-30,-50}};
+
+    int black_kingE_board[8][8]    = {{-50,-30,-30,-30,-30,-30,-30,-50},
+                                      {-30,-30,  0,  0,  0,  0,-30,-30},
+                                      {-30,-10, 20, 30, 30, 20,-10,-30},
+                                      {-30,-10, 30, 40, 40, 30,-10,-30},
+                                      {-30,-10, 30, 40, 40, 30,-10,-30},
+                                      {-30,-10, 20, 30, 30, 20,-10,-30},
+                                      {-30,-20,-10,  0,  0,-10,-20,-30},
+                                      {-50,-40,-30,-20,-20,-30,-40,-50}};
+    if(_mode EQ mode::black){
+
+        switch (piece) {
+        case 'P':
+            _score = black_pawn_board[h][w];
+            break;
+        case 'R':
+            _score = black_rook_board[h][w];
+            break;
+        case 'N':
+            _score = black_knight_board[h][w];
+            break;
+        case 'B':
+            _score = black_bishop_board[h][w];
+            break;
+        case 'Q':
+            _score = black_queen_board[h][w];
+            break;
+        case 'K':
+            _score = black_kingM_board[h][w];
+            break;
+        default:
+            break;
+        }
+    }
+    else if(_mode EQ mode::white){
+
+        switch (piece) {
+        case 'p':
+            _score = white_pawn_board[h][w];
+            break;
+        case 'r':
+            _score = white_rook_board[h][w];
+            break;
+        case 'n':
+            _score = white_knight_board[h][w];
+            break;
+        case 'b':
+            _score = white_bishop_board[h][w];
+            break;
+        case 'q':
+            _score = white_queen_board[h][w];
+            break;
+        case 'k':
+            _score = white_kingM_board[h][w];
+            break;
+        default:
+            break;
+        }
+    }
+    _score = _score/10;
+    return _score;
+
+
 }
 
 float moveGenerator::kings_landing(char _board[8][8],int _mode)
