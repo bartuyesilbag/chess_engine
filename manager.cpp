@@ -15,7 +15,7 @@ manager::manager(): QObject(NULL)
     qDebug() << "|Tez Danışmanı: Nihan Kahraman                |";
     qDebug() << "|YTU EHM 2016-2017 Bitirme Tezi               |";
     qDebug() << "|---------------------------------------------|";
-    qDebug() << "";
+    qDebug() << "   ";
     qDebug() << "Game Start! Play a Move!";
     qDebug() << "for help, write help";
     qDebug() << "White Turn!";
