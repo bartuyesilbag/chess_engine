@@ -8,7 +8,7 @@ struct glob{
     safelist<chess_pack> *white_list;
     chess_pack  pack;
     char chessBoard[8][8];
-    char piece_list[14] = {'0','P','R','N','B','Q','K','p','r','n','b','q','k'};
+    char piece_list[14] = {'.','P','R','N','B','Q','K','p','r','n','b','q','k'};
 };
 
 

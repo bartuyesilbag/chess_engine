@@ -55,18 +55,11 @@ void moveGenerator::findLegalBlackMoves()
     QPoint ex_p,new_p;
     ex_p  = QPoint(list->at(index_of).X,list->at(index_of).Y);
     new_p = QPoint(list->at(index_of).destX,list->at(index_of).destY);
-    qDebug() << black_move_to_screen(ex_p,new_p);
+    qDebug() << black_move_to_screen(ex_p,new_p) << max;
     list->clearList();
-    qDebug() << general_pack.score;
+//    qDebug() << general_pack.score;
     general_pack.score.clear();
     b->slot_msg_to_board(ex_p,new_p,"aaaa");
-    //    //int index_of = general_pack.score.indexOf(get_max(general_pack.score));
-    //    qDebug() << general_pack.score;
-    //    qDebug() << "size of vector: " << general_pack.score.size() << "size of list before clear: " << list->size();
-    //    qDebug() << "index_of: " << index_of << "element: " << general_pack.score.at(index_of);
-    //    qDebug() << "X: " << list->at(index_of).X << "Y: " << list->at(index_of).Y << "destX: " << list->at(index_of).destX << "destY: " << list->at(index_of).destY ;
-    //    list->clearList();
-    //    qDebug() << "list of list after clearList: " << list->size();
 
 }
 
@@ -87,11 +80,12 @@ void moveGenerator::find_legal_white_moves(int count)
 
 void moveGenerator::calculateBoard(char board[8][8], int _mode,int count)
 {
+
     char _board[8][8];
     float total_score,pieces_score,mobility_score,king_score,center_control_score,
             next_move_score,extended_center_score,doubled_pieces_score,piece_square_score,w1,w2,w3,w4,w5,w6,w7,w8;
     safelist<chess_pack> temp_list;
-    w1 = 10; w2 = 0.2; w3 = 0.6; w4 = 0.3; w5 = 0.25; w6 = 0.125; w7 = 0.25; w8 = 0.1;
+    w1 = 55.114; w2 = 0.245; w3 = 0.714; w4 = 0.653; w5 = 0.079; w6 = 0.312; w7 = 0.351; w8 = 0.332;
 
 
     fill_board(_board,board);
@@ -99,21 +93,21 @@ void moveGenerator::calculateBoard(char board[8][8], int _mode,int count)
 
     //calculate points
 
-    pieces_score          = pieces_points(board,_mode);
+    pieces_score          = pieces_points(board,_mode);                    //w1
 
-    mobility_score        = (float)temp_list.size();
+    mobility_score        = (float)temp_list.size();                       //w2
 
-    king_score            = kings_landing(board,_mode);
+    king_score            = kings_landing(board,_mode);                    //w3
 
-    center_control_score  = center_control(board);
+    center_control_score  = center_control(board);                         //w4
 
-    next_move_score       = next_move(_board,_mode,w1,w2,w3,0,0,w6,w7,w8);
+    next_move_score       = next_move(_board,_mode,w1,w2,w3,0,0,w6,w7,w8); //w5
 
-    extended_center_score = extended_center(board);
+    extended_center_score = extended_center(board);                        //w6
 
-    doubled_pieces_score  = doubled_pieces(board,_mode);
+    doubled_pieces_score  = doubled_pieces(board,_mode);                   //w7
 
-    piece_square_score    = piece_square_table(board,_mode);
+    piece_square_score    = piece_square_table(board,_mode);               //w7
 
 
     total_score = w1*pieces_score          +
@@ -130,9 +124,9 @@ void moveGenerator::calculateBoard(char board[8][8], int _mode,int count)
     else{
         white_pack.score.push_back(black_pack.score.at(count)-total_score);
     }
-    //qDebug() << "_mode: " << _mode << "pieces_score: " << pieces_score << "mobility_score: "
-    //         << mobility_score << "king_score: " << king_score << "center_control_score: "
-    //         << center_control_score << "next_move_score: " << next_move_score;
+//    qDebug() << "_mode: " << _mode << "pieces_score: " << w1*pieces_score << "mobility_score: "
+//             << w2*mobility_score << "king_score: " << w3*king_score << "center_control_score: "
+//             << w4*center_control_score << "next_move_score: " << w5*next_move_score;
 }
 
 float moveGenerator::get_max(QVector<float> _scores)
@@ -229,13 +223,13 @@ float moveGenerator::pieces_points(char _board[8][8], int _mode)
             }
         }
     }
-    return point - 0.5*doubled_pawns - 0.5*isolated_pawns;
+    return point - 0.1*doubled_pawns - 0.1*isolated_pawns;
 }
 
 float moveGenerator::center_control(char _board[8][8])
 {
     float _score = 0;
-    char piece_list[14] = {'0','P','R','N','B','Q','K','p','r','n','b','q','k'};
+    char piece_list[14] = {'.','P','R','N','B','Q','K','p','r','n','b','q','k'};
     for(int i = 3; i<=4;i++){
         for(int j = 3; j<=4;j++){
             int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, _board[i][j]));
@@ -274,20 +268,19 @@ float moveGenerator::next_move(char _board[8][8], int _mode,float w1,float w2,fl
     piece_square_score    = piece_square_table(_board,_mode);
 
 
-    _score = w1*pieces_score          +
+    _score += w1*pieces_score/100     +
              w2*king_score            +
              w3*center_control_score  +
              w6*extended_center_score +
              w7*doubled_pieces_score  +
-             w8*piece_square_score + w4 + w5;
-
+             w8*piece_square_score/10 + w4 + w5;
     return _score;
 }
 
 float moveGenerator::extended_center(char _board[8][8])
 {
     float _score = 0;
-    char piece_list[14] = {'0','P','R','N','B','Q','K','p','r','n','b','q','k'};
+    char piece_list[14] = {'.','P','R','N','B','Q','K','p','r','n','b','q','k'};
     for(int i = 2; i<=5;i++){
         for(int j = 2; j<=5;j++){
             int a = std::distance(piece_list, std::find(piece_list, piece_list + 13, _board[i][j]));
@@ -326,7 +319,7 @@ float moveGenerator::piece_square_table(char _board[8][8], int _mode)
 
     for(int i = 0; i<=7;i++){
         for(int j = 0; j<=7;j++){
-            if(_board[i][j] NE '0'){
+            if(_board[i][j] NE '.'){
                 _score += square_tables(_board[i][j],i,j,_mode);
             }
         }
@@ -532,20 +525,20 @@ float moveGenerator::kings_landing(char _board[8][8],int _mode)
     int w = kings_point.y();
 
     if(h-1 BG 0 AND w-1 BG 0)
-        _score += _board[h-1][w-1] NE '0' ? 1 : 0;
+        _score += _board[h-1][w-1] NE '.' ? 1 : 0;
     if(h-1 BG 0)
-        _score += _board[h-1][w]   NE '0' ? 1 : 0;
+        _score += _board[h-1][w]   NE '.' ? 1 : 0;
     if(h-1 BG 0 AND w+1 SM 7)
-        _score += _board[h-1][w+1] NE '0' ? 1 : 0;
+        _score += _board[h-1][w+1] NE '.' ? 1 : 0;
     if(w-1 BG 0)
-        _score += _board[h][w-1]   NE '0' ? 1 : 0;
+        _score += _board[h][w-1]   NE '.' ? 1 : 0;
     if(w+1 SM 7)
-        _score += _board[h][w+1]   NE '0' ? 1 : 0;
+        _score += _board[h][w+1]   NE '.' ? 1 : 0;
     if(h+1 SM 7 AND w-1 BG 0)
-        _score += _board[h+1][w-1] NE '0' ? 1 : 0;
+        _score += _board[h+1][w-1] NE '.' ? 1 : 0;
     if(h+1 SM 7)
-        _score += _board[h+1][w]   NE '0' ? 1 : 0;
+        _score += _board[h+1][w]   NE '.' ? 1 : 0;
     if(h+1 SM 7 AND w+1 SM 7)
-        _score += _board[h+1][w+1] NE '0' ? 1 : 0;
+        _score += _board[h+1][w+1] NE '.' ? 1 : 0;
     return _score;
 }

@@ -27,24 +27,6 @@ void board::setup_board()
         }
     }
 
-    //        chessBoard[1][1]   = piece_list[chess_pieces::WhiteRook  ];
-    //        chessBoard[3][1]   = piece_list[chess_pieces::WhiteRook  ];
-    //        chessBoard[3][0]   = piece_list[chess_pieces::WhiteQueen ];
-    //        chessBoard[0][7]   = piece_list[chess_pieces::BlackKing  ];
-
-    //    chessBoard[realBoardHorizontal::five][realBoardVertical::h]   = piece_list[chess_pieces::WhitePawn ];
-    //    chessBoard[realBoardHorizontal::one][realBoardVertical::h]   = piece_list[chess_pieces::WhiteKing ];
-    //    chessBoard[realBoardHorizontal::five][realBoardVertical::a]   = piece_list[chess_pieces::BlackKing ];
-    //    chessBoard[realBoardHorizontal::two][realBoardVertical::a]   = piece_list[chess_pieces::BlackPawn  ];
-    /*chessBoard[realBoardHorizontal::one][realBoardVertical::h]   = piece_list[chess_pieces::WhitePawn  ];
-    chessBoard[realBoardHorizontal::seven][realBoardVertical::a]   = piece_list[chess_pieces::WhiteRook  ];
-    chessBoard[realBoardHorizontal::four ][realBoardVertical::d]   = piece_list[chess_pieces::BlackPawn  ];
-    chessBoard[realBoardHorizontal::four ][realBoardVertical::e]   = piece_list[chess_pieces::BlackPawn  ];
-    chessBoard[realBoardHorizontal::four ][realBoardVertical::f]   = piece_list[chess_pieces::BlackPawn  ];
-    chessBoard[realBoardHorizontal::five ][realBoardVertical::d]   = piece_list[chess_pieces::BlackPawn  ];
-    chessBoard[realBoardHorizontal::five ][realBoardVertical::f]   = piece_list[chess_pieces::BlackPawn  ];
-    chessBoard[realBoardHorizontal::five ][realBoardVertical::e]   = piece_list[chess_pieces::BlackKing];*/
-
     for(int w = realBoardVertical::a; w SM realBoardVertical::h; w++){
         chessBoard[realBoardHorizontal::two][w] = piece_list[chess_pieces::WhitePawn];
     }
@@ -836,7 +818,7 @@ void board::getBoard(int m,char board[8][8],safelist<chess_pack> *_list)
 {
     for(int h = 0; h<8; h++){
         for(int w = 0 ; w<8; w++){
-            if(board[h][w] NE '0'){
+            if(board[h][w] NE '.'){
                 chess_pack p;
                 p.destX = h;
                 p.destY = w;
@@ -864,7 +846,7 @@ int  board::getPiecesNumber()
     int size = 0;
     for(int h = 0; h<8; h++){
         for(int w = 0 ; w<8; w++){
-            if(chessBoard[h][w] NE '0'){
+            if(chessBoard[h][w] NE '.'){
                 size++;
             }
         }
@@ -1261,11 +1243,11 @@ void board::show_board()
 {
     qDebug() << "";
     for(int h = 0 ; h<8; h++){
-        qDebug() << h << 8 - h << " " << chessBoard[h][0] << chessBoard[h][1] << chessBoard[h][2] << chessBoard[h][3]
+        qDebug() << 8 - h << " " << chessBoard[h][0] << chessBoard[h][1] << chessBoard[h][2] << chessBoard[h][3]
                  << chessBoard[h][4] << chessBoard[h][5] << chessBoard[h][6] << chessBoard[h][7];
     }
-    qDebug() << "\n      A" << "B" << "C" << "D" << "E" << "F" << "G" << "H";
-    qDebug() << "\n      0" << "1" << "2" << "3" << "4" << "5" << "6" << "7";
+    qDebug() << "\n    A" << "B" << "C" << "D" << "E" << "F" << "G" << "H";
+//    qDebug() << "\n      0" << "1" << "2" << "3" << "4" << "5" << "6" << "7";
 }
 
 bool board::check(QPoint ex_p, QPoint new_p,int _mode)

@@ -42,7 +42,7 @@ private:
     chess_pack  pack;
 
 
-    char piece_list[14] = {'0','P','R','N','B','Q','K','p','r','n','b','q','k'};
+    char piece_list[14] = {'.','P','R','N','B','Q','K','p','r','n','b','q','k'};
 
     bool check(QPoint ex_p, QPoint new_p, int _mode);
 
