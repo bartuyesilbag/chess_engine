@@ -30,10 +30,10 @@ public:
     int  getPiecesNumber()      ;
     char chessBoard[8][8];
 private:
+    void show_board();
     void setup_board();
     void getBlackMoves(char pieceName, int x, int y, char board[][8], safelist<chess_pack> *_list);
     void getWhiteMoves(char pieceName, int x, int y, char board[][8], safelist<chess_pack> *_list);
-    void show_board();
     void help();
     void castling_conditions_check(QPoint ex_p);
 

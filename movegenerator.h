@@ -15,17 +15,16 @@ public:
 private:
     void   msgToBoard(QPoint ex_p, QPoint new_p);
     void   calculateBoard(char board[][8], int _mode, int count = 0);
-    float    get_max(QVector<float> _scores);
+    float  get_max(QVector<float> _scores);
     void   find_legal_white_moves(int count);
     void   fill_board(char _board[][8], char chessboard[][8]);
     float  pieces_points(char _board[][8],int _mode);
-    float  kings_landing(char _board[][8], int _mode);
+    float  kings_landing(char _board[][8]);
     float  center_control(char _board[][8]);
-    float  next_move(char _board[][8] , int _mode, float w1 = 0, float w2 = 0, float w3 = 0, float w4 = 0, float w5 = 0, float w6 = 0, float w7 = 0, float w8 = 0);
     float  extended_center(char _board[][8]);
-    float  doubled_pieces(char _board[][8], int _mode);
-    float  piece_square_table(char _board[][8], int _mode);
-    float square_tables(char piece, int h, int w, int _mode);
+    float  doubled_pieces(char _board[][8]);
+    float  piece_square_table(char _board[][8]);
+    float square_tables(char piece, int h, int w);
     QString black_move_to_screen(QPoint ex_p, QPoint new_p);
 
     chess_pack            pack;
@@ -34,7 +33,7 @@ private:
     score_pack            general_pack;
     safelist<chess_pack> *list;
     safelist<chess_pack> *white_list;
-
+    int turn = 0;
     board                *b;
     char verticle[8]   = {'8','7','6','5','4','3','2','1'};
     char horizontal[8] = {'a','b','c','d','e','f','g','h'};
