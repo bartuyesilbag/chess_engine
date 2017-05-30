@@ -15,7 +15,7 @@ public:
 private:
     void   msgToBoard(QPoint ex_p, QPoint new_p);
     void   calculateBoard(char board[][8], int _mode, int count = 0);
-    float  get_max(QVector<float> _scores);
+    QVector<float> get_max(QVector<float> _scores);
     void   find_legal_white_moves(int count);
     void   fill_board(char _board[][8], char chessboard[][8]);
     float  pieces_points(char _board[][8],int _mode);
@@ -25,6 +25,7 @@ private:
     float  doubled_pieces(char _board[][8]);
     float  piece_square_table(char _board[][8]);
     float square_tables(char piece, int h, int w);
+    bool myfunction(int i,int j);
     QString black_move_to_screen(QPoint ex_p, QPoint new_p);
 
     chess_pack            pack;
