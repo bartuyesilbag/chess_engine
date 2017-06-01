@@ -864,11 +864,11 @@ int  board::getPiecesNumber()
     return size;
 }
 
-bool board::boardSimulate(QPoint ex_p, QPoint new_p, char board[8][8],int casling_status)
+bool board::boardSimulate(QPoint ex_p, QPoint new_p, char board[8][8],char _board[8][8], int casling_status)
 {
     for(int h = 0; h<8; h++){
         for(int w = 0 ; w<8; w++){
-            board[h][w] = chessBoard[h][w];
+            board[h][w] = _board[h][w];
         }
     }
     if(casling_status EQ castling_status::short_castling){
@@ -890,7 +890,7 @@ bool board::boardSimulate(QPoint ex_p, QPoint new_p, char board[8][8],int caslin
     }
 }
 
-void board::getMoves(char pieceName, int x, int y,int mode,char board[8][8],safelist<chess_pack> *_list)
+void board::getMoves(char pieceName, int x, int y, int mode, char board[8][8], safelist<chess_pack> *_list)
 {
     if(mode EQ 0 OR mode EQ 2){
         getWhiteMoves(pieceName,x,y,board,_list);

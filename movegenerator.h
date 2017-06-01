@@ -26,6 +26,7 @@ private:
     float  piece_square_table(char _board[][8]);
     float square_tables(char piece, int h, int w);
     bool myfunction(int i,int j);
+    void show_board(char _board[][8]);
     QString black_move_to_screen(QPoint ex_p, QPoint new_p);
 
     chess_pack            pack;
