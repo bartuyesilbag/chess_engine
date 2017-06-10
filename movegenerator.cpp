@@ -54,73 +54,43 @@ void moveGenerator::findLegalBlackMoves()
         }
     }
     else if (turn BG 3) {
+
         char _board[8][8];
-        fill_board(_board,b->chessBoard);
-        b->getBoard(mode::black,_board,list);
-        int listSize = list->size();
-        for(int i = 0; i < listSize;i++){
-            if(b->boardSimulate(QPoint(list->at(i).X,list->at(i).Y),QPoint(list->at(i).destX,list->at(i).destY),_board,b->chessBoard,list->at(i).flag.castling.cast_stat)){
-                calculateBoard(_board,mode::black,i);
-            }
-            else{
-                black_pack.score.push_back(-10000);
-            }
-        }
-        QVector<float> max_five = get_max(black_pack.score,MAX);
+        QVector<float> max_five;
         QVector<int> index_of_max_five;
+
+        guess_black(_board,b->chessBoard);
+
+        max_five = get_max(black_pack.score,MAX);
         foreach (float max, max_five) {
             index_of_max_five.push_back(black_pack.score.indexOf(max));
         }
-        int count = std::count (black_pack.score.begin(), black_pack.score.end(),max_five.at(0)); //find max prob. move's count (in case of )
-
-        foreach (int moves, index_of_max_five){
+        foreach (int max_five_move, index_of_max_five) {
             char white_board[8][8];
-            char temp_wboard[8][8];
-            fill_board(white_board,b->chessBoard);
-            if(b->boardSimulate(QPoint(list->at(moves).X,list->at(moves).Y),QPoint(list->at(moves).destX,list->at(moves).destY)
-                                ,white_board,b->chessBoard,list->at(moves).flag.castling.cast_stat)){
-                b->getBoard(mode::white,white_board,white_list);
-                int listSize = white_list->size();
-                list_sizes.push_back(listSize);
-                for(int i = 0; i < listSize;i++){
-                    if(b->boardSimulate(QPoint(white_list->at(i).X,white_list->at(i).Y),QPoint(white_list->at(i).destX,white_list->at(i).destY),
-                                        temp_wboard,white_board,white_list->at(i).flag.castling.cast_stat)){
-                        calculateBoard(temp_wboard,mode::white,i);
-                    }
-                    else{
-                        white_pack.score.push_back(-10000);
-                    }
-                }
-                white_list->clearList();
-            }
-             //white_pack.score.clear();
+            guess_white(white_board,_board,max_five_move);
         }
 
-//        QVector<float> min_white = get_min(white_pack.score,1);
-//        int index_of_min_white = white_pack.score.indexOf(min_white.at(0));
-//        int index_of_total = -1;
-//        foreach (int j, list_sizes) {
-//            qDebug() << "index_of_min_white : " << index_of_min_white << "min_white : " << min_white << list_sizes;
-//            if(index_of_min_white BG 0){
-//                index_of_min_white = index_of_min_white -j;
-//                index_of_total++;
-//            }
-//            else{
-//                break;
-//            }
-//        }
-        int index_of_total;
-        if(count EQ 1){
-            index_of_total = black_pack.score.indexOf(max_five.at(0));
+
+        QVector<float> min_white = get_min(white_pack.score,1);
+        int index_of_white = white_pack.score.indexOf(min_white.at(0));
+        int index_of_total = -1;
+        foreach (int j, list_sizes) {
+            qDebug() << "index_of_min_white : " << index_of_white << "min_white : " << min_white << list_sizes;
+            if(index_of_white BG 0){
+                index_of_white = index_of_white -j;
+                index_of_total++;
+            }
+            else{
+                break;
+            }
         }
-        else{
-            int v1 = std::rand() % count;
-            index_of_total = black_pack.score.indexOf(max_five.at(0),v1);
-        }
-        qDebug() << white_pack.score;
-        qDebug() << "index_of_total : " << index_of_total;
-        ex_p  = QPoint(list->at(index_of_total).X,list->at(index_of_total).Y);
-        new_p = QPoint(list->at(index_of_total).destX,list->at(index_of_total).destY);
+
+
+
+
+        ex_p  = QPoint(list->at(index_of_max_five.at(index_of_total)).X,list->at(index_of_max_five.at(index_of_total)).Y);
+        new_p = QPoint(list->at(index_of_max_five.at(index_of_total)).destX,list->at(index_of_max_five.at(index_of_total)).destY);
+        qDebug() << "dasdişsldfisdşlfs";
     }
 
     qDebug() << black_move_to_screen(ex_p,new_p);
@@ -128,12 +98,11 @@ void moveGenerator::findLegalBlackMoves()
     list->clearList();
     black_pack.score.clear();
     white_pack.score.clear();
+    list_sizes.clear();
     turn++;
-
     b->slot_msg_to_board(ex_p,new_p,"aaaa");
 
 }
-
 
 void moveGenerator::calculateBoard(char board[8][8], int _mode,int count)
 {
@@ -165,7 +134,7 @@ void moveGenerator::calculateBoard(char board[8][8], int _mode,int count)
 
     doubled_pieces_score  = doubled_pieces(board);                         //w6
 
-    piece_square_score    = piece_square_table(board);                     //w7
+    piece_square_score    = piece_square_table(board,_mode);               //w7
 
 
     total_score = w1*pieces_score          +
@@ -192,11 +161,11 @@ QVector<float> moveGenerator::get_max(QVector<float> _scores,int max_number)
     for(int i=1; i<=max_number;i++){
         max_five.push_back(_scores_.at(_scores_.length()-i));
     }
-//    max_five.push_back(_scores_.at(_scores_.length()-1));
-//    max_five.push_back(_scores_.at(_scores_.length()-2));
-//    max_five.push_back(_scores_.at(_scores_.length()-3));
-//    max_five.push_back(_scores_.at(_scores_.length()-4));
-//    max_five.push_back(_scores_.at(_scores_.length()-5));
+    //    max_five.push_back(_scores_.at(_scores_.length()-1));
+    //    max_five.push_back(_scores_.at(_scores_.length()-2));
+    //    max_five.push_back(_scores_.at(_scores_.length()-3));
+    //    max_five.push_back(_scores_.at(_scores_.length()-4));
+    //    max_five.push_back(_scores_.at(_scores_.length()-5));
     //float max = *std::max_element(_scores.begin(), _scores.end());
     return max_five;
 }
@@ -210,18 +179,18 @@ QVector<float> moveGenerator::get_min(QVector<float> _scores,int min_number)
     for(int i=0; i<min_number;i++){
         min_numbers.push_back(_scores_.at(i));
     }
-//    max_five.push_back(_scores_.at(_scores_.length()-1));
-//    max_five.push_back(_scores_.at(_scores_.length()-2));
-//    max_five.push_back(_scores_.at(_scores_.length()-3));
-//    max_five.push_back(_scores_.at(_scores_.length()-4));
-//    max_five.push_back(_scores_.at(_scores_.length()-5));
+    //    max_five.push_back(_scores_.at(_scores_.length()-1));
+    //    max_five.push_back(_scores_.at(_scores_.length()-2));
+    //    max_five.push_back(_scores_.at(_scores_.length()-3));
+    //    max_five.push_back(_scores_.at(_scores_.length()-4));
+    //    max_five.push_back(_scores_.at(_scores_.length()-5));
     //float max = *std::max_element(_scores.begin(), _scores.end());
     return min_numbers;
 }
 
 QString moveGenerator::black_move_to_screen(QPoint ex_p, QPoint new_p)
 {
-    //system("clear");
+    system("clear");
 
     qDebug() << "|---------------------------------------------|";
     qDebug() << "|Yapay Zeka Temelli Satranç Simulasyonu v0.0.1|";
@@ -278,9 +247,9 @@ float moveGenerator::pieces_points(char _board[8][8], int _mode)
             case 'Q':
                 point += 921.3;
                 break;
-//            case 'K':
-//                point += 1000000;
-//                break;
+                //            case 'K':
+                //                point += 1000000;
+                //                break;
             case 'p':
                 point -= 100;
                 doubled_pawns  -= _board[h-1][w] EQ 'p' ? 1 :0;
@@ -297,9 +266,9 @@ float moveGenerator::pieces_points(char _board[8][8], int _mode)
             case 'q':
                 point -= 921.3;
                 break;
-//            case 'k':
-//                point -= 200;
-//                break;
+                //            case 'k':
+                //                point -= 200;
+                //                break;
             default:
                 break;
             }
@@ -366,14 +335,14 @@ float moveGenerator::doubled_pieces(char _board[8][8])
     return _score;
 }
 
-float moveGenerator::piece_square_table(char _board[8][8])
+float moveGenerator::piece_square_table(char _board[8][8],int _mode)
 {
     float _score = 0;
 
     for(int i = 0; i<=7;i++){
         for(int j = 0; j<=7;j++){
             if(_board[i][j] NE '.'){
-                _score += square_tables(_board[i][j],i,j);
+                _score += square_tables(_board[i][j],i,j,_mode);
             }
         }
     }
@@ -381,7 +350,7 @@ float moveGenerator::piece_square_table(char _board[8][8])
     return _score;
 }
 
-float moveGenerator::square_tables(char piece,int h,int w)
+float moveGenerator::square_tables(char piece,int h,int w,int _mode)
 {
 
     float _score;
@@ -512,34 +481,56 @@ float moveGenerator::square_tables(char piece,int h,int w)
                                       {-30,-10, 20, 30, 30, 20,-10,-30},
                                       {-30,-20,-10,  0,  0,-10,-20,-30},
                                       {-50,-40,-30,-20,-20,-30,-40,-50}};
-
-    switch (piece) {
-    case 'P':
-        _score = black_pawn_board[h][w];
-        break;
-    case 'R':
-        _score = black_rook_board[h][w];
-        break;
-    case 'N':
-        _score = black_knight_board[h][w];
-        break;
-    case 'B':
-        _score = black_bishop_board[h][w];
-        break;
-    case 'Q':
-        _score = black_queen_board[h][w];
-        break;
-    case 'K':
-        _score = black_kingM_board[h][w];
-        break;
-    default:
-        break;
+    if(_mode = mode::black){
+        switch (piece) {
+        case 'P':
+            _score += black_pawn_board[h][w];
+            break;
+        case 'R':
+            _score += black_rook_board[h][w];
+            break;
+        case 'N':
+            _score += black_knight_board[h][w];
+            break;
+        case 'B':
+            _score += black_bishop_board[h][w];
+            break;
+        case 'Q':
+            _score += black_queen_board[h][w];
+            break;
+        case 'K':
+            _score += black_kingM_board[h][w];
+            break;
+        default:
+            break;
+        }
     }
-
+    else{
+        switch (piece) {
+        case 'p':
+            _score -= white_pawn_board[h][w];
+            break;
+        case 'r':
+            _score -= white_rook_board[h][w];
+            break;
+        case 'n':
+            _score -= white_knight_board[h][w];
+            break;
+        case 'b':
+            _score -= white_bishop_board[h][w];
+            break;
+        case 'q':
+            _score -= white_queen_board[h][w];
+            break;
+        case 'k':
+            _score -= white_kingM_board[h][w];
+            break;
+        default:
+            break;
+        }
+    }
     _score = _score/10;
     return _score;
-
-
 }
 
 float moveGenerator::kings_landing(char _board[8][8])
@@ -600,4 +591,41 @@ void moveGenerator::show_board(char _board[8][8])
     }
     qDebug() << "\n    A" << "B" << "C" << "D" << "E" << "F" << "G" << "H";
     qDebug() << "\n      0" << "1" << "2" << "3" << "4" << "5" << "6" << "7";
+}
+
+void moveGenerator::guess_black(char temp_board[8][8], char chess_board[8][8]){
+    fill_board(temp_board,chess_board);
+    b->getBoard(mode::black,temp_board,list);
+    int listSize = list->size();
+    for(int i = 0; i < listSize;i++){
+        if(b->boardSimulate(QPoint(list->at(i).X,list->at(i).Y),QPoint(list->at(i).destX,list->at(i).destY),temp_board,chess_board,list->at(i).flag.castling.cast_stat)){
+            calculateBoard(temp_board,mode::black,i);
+        }
+        else{
+            black_pack.score.push_back(-10000);
+        }
+    }
+}
+
+void moveGenerator::guess_white(char white_board[8][8], char black_board[8][8],int move_index){
+
+    fill_board(white_board,black_board);
+
+    b->boardSimulate(QPoint(list->at(move_index).X,list->at(move_index).Y),QPoint(list->at(move_index).destX,list->at(move_index).destY),
+                     white_board,black_board,list->at(move_index).flag.castling.cast_stat);
+    b->getBoard(mode::white,white_board,white_list);
+    int whiteListSize = white_list->size();
+    qDebug() << whiteListSize;
+    list_sizes.push_back(whiteListSize);
+    for(int i = 0; i < whiteListSize;i++){
+        char white_temp_board[8][8];
+        if(b->boardSimulate(QPoint(white_list->at(i).X,white_list->at(i).Y),QPoint(white_list->at(i).destX,white_list->at(i).destY),
+                            white_temp_board,white_board,white_list->at(i).flag.castling.cast_stat)){
+            calculateBoard(white_temp_board,mode::white,i);
+        }
+        else{
+            white_pack.score.push_back(10000000);
+        }
+    }
+    white_list->clearList();
 }

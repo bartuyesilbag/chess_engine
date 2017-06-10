@@ -24,10 +24,12 @@ private:
     float  center_control(char _board[][8]);
     float  extended_center(char _board[][8]);
     float  doubled_pieces(char _board[][8]);
-    float  piece_square_table(char _board[][8]);
-    float square_tables(char piece, int h, int w);
+    float  piece_square_table(char _board[][8], int _mode);
+    float square_tables(char piece, int h, int w, int _mode);
     bool myfunction(int i,int j);
     void show_board(char _board[][8]);
+    void guess_black(char temp_board[][8]  , char chess_board[][8]);
+    void guess_white(char white_board[8][8], char black_board[8][8], int move_index);
     QString black_move_to_screen(QPoint ex_p, QPoint new_p);
 
     chess_pack            pack;
