@@ -12,6 +12,8 @@
 #include <cstdlib>
 #include <ctime>
 
+#define MAX 5
+
 moveGenerator::moveGenerator(safelist<chess_pack> *_list, safelist<chess_pack> *_white_list, board *_b): QObject(NULL)
 {
     list = _list;
@@ -64,7 +66,7 @@ void moveGenerator::findLegalBlackMoves()
                 black_pack.score.push_back(-10000);
             }
         }
-        QVector<float> max_five = get_max(black_pack.score);
+        QVector<float> max_five = get_max(black_pack.score,MAX);
         QVector<int> index_of_max_five;
         foreach (float max, max_five) {
             index_of_max_five.push_back(black_pack.score.indexOf(max));
@@ -79,12 +81,11 @@ void moveGenerator::findLegalBlackMoves()
                                 ,white_board,b->chessBoard,list->at(moves).flag.castling.cast_stat)){
                 b->getBoard(mode::white,white_board,white_list);
                 int listSize = white_list->size();
+                list_sizes.push_back(listSize);
                 for(int i = 0; i < listSize;i++){
                     if(b->boardSimulate(QPoint(white_list->at(i).X,white_list->at(i).Y),QPoint(white_list->at(i).destX,white_list->at(i).destY),
                                         temp_wboard,white_board,white_list->at(i).flag.castling.cast_stat)){
                         calculateBoard(temp_wboard,mode::white,i);
-                        qDebug() << "i : " << i;
-                        show_board(temp_wboard);
                     }
                     else{
                         white_pack.score.push_back(-10000);
@@ -92,28 +93,41 @@ void moveGenerator::findLegalBlackMoves()
                 }
                 white_list->clearList();
             }
-            qDebug() << white_pack.score;
-             white_pack.score.clear();
+             //white_pack.score.clear();
         }
 
-        int index_of;
+//        QVector<float> min_white = get_min(white_pack.score,1);
+//        int index_of_min_white = white_pack.score.indexOf(min_white.at(0));
+//        int index_of_total = -1;
+//        foreach (int j, list_sizes) {
+//            qDebug() << "index_of_min_white : " << index_of_min_white << "min_white : " << min_white << list_sizes;
+//            if(index_of_min_white BG 0){
+//                index_of_min_white = index_of_min_white -j;
+//                index_of_total++;
+//            }
+//            else{
+//                break;
+//            }
+//        }
+        int index_of_total;
         if(count EQ 1){
-            index_of = black_pack.score.indexOf(max_five.at(0));
+            index_of_total = black_pack.score.indexOf(max_five.at(0));
         }
         else{
             int v1 = std::rand() % count;
-            index_of = black_pack.score.indexOf(max_five.at(0),v1);
+            index_of_total = black_pack.score.indexOf(max_five.at(0),v1);
         }
-
-        ex_p  = QPoint(list->at(index_of).X,list->at(index_of).Y);
-        new_p = QPoint(list->at(index_of).destX,list->at(index_of).destY);
+        qDebug() << white_pack.score;
+        qDebug() << "index_of_total : " << index_of_total;
+        ex_p  = QPoint(list->at(index_of_total).X,list->at(index_of_total).Y);
+        new_p = QPoint(list->at(index_of_total).destX,list->at(index_of_total).destY);
     }
 
     qDebug() << black_move_to_screen(ex_p,new_p);
 
     list->clearList();
     black_pack.score.clear();
-
+    white_pack.score.clear();
     turn++;
 
     b->slot_msg_to_board(ex_p,new_p,"aaaa");
@@ -127,7 +141,7 @@ void moveGenerator::calculateBoard(char board[8][8], int _mode,int count)
     float total_score,pieces_score,mobility_score,king_score,center_control_score,
             extended_center_score,doubled_pieces_score,piece_square_score,w1,w2,w3,w4,w5,w6,w7;
     safelist<chess_pack> temp_list;
-    w1 = 3.114; w2 = 1.245; w3 = 0.714; w4 = 0.653; w5 = 0.312; w6 = 0.351; w7 = 0.332;
+    w1 = 1; w2 = 126.5; w3 = 50; w4 = 45; w5 = 20; w6 = 27; w7 = 20;
 
     fill_board(_board,board);
     b->getBoard(_mode,_board,&temp_list);
@@ -169,18 +183,40 @@ void moveGenerator::calculateBoard(char board[8][8], int _mode,int count)
     }
 }
 
-QVector<float> moveGenerator::get_max(QVector<float> _scores)
+QVector<float> moveGenerator::get_max(QVector<float> _scores,int max_number)
 {
     QVector<float> _scores_ = _scores;
     std::sort(_scores_.begin(),_scores_.end());
     QVector<float> max_five;
-    max_five.push_back(_scores_.at(_scores_.length()-1));
-    max_five.push_back(_scores_.at(_scores_.length()-2));
-    max_five.push_back(_scores_.at(_scores_.length()-3));
-    max_five.push_back(_scores_.at(_scores_.length()-4));
-    max_five.push_back(_scores_.at(_scores_.length()-5));
+
+    for(int i=1; i<=max_number;i++){
+        max_five.push_back(_scores_.at(_scores_.length()-i));
+    }
+//    max_five.push_back(_scores_.at(_scores_.length()-1));
+//    max_five.push_back(_scores_.at(_scores_.length()-2));
+//    max_five.push_back(_scores_.at(_scores_.length()-3));
+//    max_five.push_back(_scores_.at(_scores_.length()-4));
+//    max_five.push_back(_scores_.at(_scores_.length()-5));
     //float max = *std::max_element(_scores.begin(), _scores.end());
     return max_five;
+}
+
+QVector<float> moveGenerator::get_min(QVector<float> _scores,int min_number)
+{
+    QVector<float> _scores_ = _scores;
+    std::sort(_scores_.begin(),_scores_.end());
+    QVector<float> min_numbers;
+
+    for(int i=0; i<min_number;i++){
+        min_numbers.push_back(_scores_.at(i));
+    }
+//    max_five.push_back(_scores_.at(_scores_.length()-1));
+//    max_five.push_back(_scores_.at(_scores_.length()-2));
+//    max_five.push_back(_scores_.at(_scores_.length()-3));
+//    max_five.push_back(_scores_.at(_scores_.length()-4));
+//    max_five.push_back(_scores_.at(_scores_.length()-5));
+    //float max = *std::max_element(_scores.begin(), _scores.end());
+    return min_numbers;
 }
 
 QString moveGenerator::black_move_to_screen(QPoint ex_p, QPoint new_p)
@@ -222,66 +258,56 @@ float moveGenerator::pieces_points(char _board[8][8], int _mode)
 {
     float point          = 0;
     float doubled_pawns  = 0;
-    float isolated_pawns = 0;
-    float double_knight = 0;
-    float double_bishop = 0;
 
     for(int h = 0; h<8; h++){
         for(int w = 0 ; w<8; w++){
             switch (_board[h][w]) {
             case 'P':
-                point += 1;
-                doubled_pawns  += _board[h+1][w] EQ 'P' ? 1 : 0;
-                isolated_pawns += _board[h][w+1] EQ 'P' ? 0.5 : 0;
-                isolated_pawns += _board[h][w-1] EQ 'P' ? 0.5 : 0;
+                point += 100;
+                doubled_pawns  += _board[h+1][w] EQ 'P' ? 14.3 : 0;
                 break;
             case 'R':
-                point += 5;
+                point += 489.7;
                 break;
             case 'N':
-                point += 3;
-                double_knight += 1;
+                point += 295.2;
                 break;
             case 'B':
-                point += 3;
-                double_bishop += 1;
+                point += 315.4;
                 break;
             case 'Q':
-                point += 9;
+                point += 921.3;
                 break;
-            case 'K':
-                point += 200;
-                break;
+//            case 'K':
+//                point += 1000000;
+//                break;
             case 'p':
-                point -= 1;
+                point -= 100;
                 doubled_pawns  -= _board[h-1][w] EQ 'p' ? 1 :0;
-                isolated_pawns -= _board[h][w+1] EQ 'p' ? 0.5 : 0;
-                isolated_pawns -= _board[h][w-1] EQ 'p' ? 0.5 : 0;
                 break;
             case 'r':
-                point -= 5;
+                point -= 489.7;
                 break;
             case 'n':
-                point -= 3;
+                point -= 295.2;
                 break;
             case 'b':
-                point -= 3;
+                point -= 315.4;
                 break;
             case 'q':
-                point -= 9;
+                point -= 921.3;
                 break;
-            case 'k':
-                point -= 200;
-                break;
+//            case 'k':
+//                point -= 200;
+//                break;
             default:
                 break;
             }
 
         }
     }
-    double_knight  = double_knight BG 1 ? 1 : 0;
-    double_bishop  = double_bishop BG 1 ? 1 : 0;
-    return point + 0.1*double_bishop + 0.1*double_knight - 0.1*doubled_pawns - 0.1*isolated_pawns;
+
+    return point - 0.1*doubled_pawns;
 }
 
 float moveGenerator::center_control(char _board[8][8])

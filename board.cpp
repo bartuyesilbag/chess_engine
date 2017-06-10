@@ -1270,13 +1270,15 @@ bool board::check(QPoint ex_p, QPoint new_p,int _mode)
         _list_ = list;
     }
     char c = chessBoard[ex_p.x()][ex_p.y()];
-    getMoves(c,ex_p.x(),ex_p.y(),_mode,chessBoard,_list_);
-    int list_size = _list_->size();
-    for(int i = 0; i < list_size; i++){
-        _list_->pop(pack);
-        if(pack.destX EQ new_p.x() AND pack.destY EQ new_p.y()){
-            _list_->clearList();
-            return true;
+    if(chessBoard[new_p.x()][new_p.y()] NE ('K' OR 'k')){
+        getMoves(c,ex_p.x(),ex_p.y(),_mode,chessBoard,_list_);
+        int list_size = _list_->size();
+        for(int i = 0; i < list_size; i++){
+            _list_->pop(pack);
+            if(pack.destX EQ new_p.x() AND pack.destY EQ new_p.y()){
+                _list_->clearList();
+                return true;
+            }
         }
     }
     _list_->clearList();

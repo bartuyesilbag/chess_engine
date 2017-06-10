@@ -15,7 +15,8 @@ public:
 private:
     void   msgToBoard(QPoint ex_p, QPoint new_p);
     void   calculateBoard(char board[][8], int _mode, int count = 0);
-    QVector<float> get_max(QVector<float> _scores);
+    QVector<float> get_max(QVector<float> _scores, int max_number);
+    QVector<float> get_min(QVector<float> _scores,int min_number);
     void   find_legal_white_moves(int count);
     void   fill_board(char _board[][8], char chessboard[][8]);
     float  pieces_points(char _board[][8],int _mode);
@@ -35,6 +36,7 @@ private:
     score_pack            general_pack;
     safelist<chess_pack> *list;
     safelist<chess_pack> *white_list;
+    QVector<int>          list_sizes;
     int turn = 0;
     board                *b;
     char verticle[8]   = {'8','7','6','5','4','3','2','1'};
