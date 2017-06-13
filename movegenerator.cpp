@@ -75,7 +75,6 @@ void moveGenerator::findLegalBlackMoves()
         int index_of_white = white_pack.score.indexOf(min_white.at(0));
         int index_of_total = -1;
         foreach (int j, list_sizes) {
-            qDebug() << "index_of_min_white : " << index_of_white << "min_white : " << min_white << list_sizes;
             if(index_of_white BG 0){
                 index_of_white = index_of_white -j;
                 index_of_total++;

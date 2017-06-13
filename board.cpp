@@ -106,9 +106,9 @@ void board::slot_msg_to_board(QPoint ex_p,QPoint new_p,std::string message)
                 emit signal_from_board(turn_counter);
             }
             else{
-
                 chessBoard[ex_p.x()][ex_p.y()]   = piece_list[chess_pieces::Empty];
                 chessBoard[new_p.x()][new_p.y()] = c;
+
 
                 /* siyaha şah çekilme durumu */
 
@@ -594,7 +594,7 @@ void board::king(int x, int y,safelist<chess_pack> *_list,int _mode,char board[8
 {
     QPoint ex_p(x,y);
     if(board[x+1][y]   EQ piece_list[chess_pieces::Empty] && x+1 SM 7){
-        if(checkmate(mode::black,board,ex_p,QPoint(x+1,y))){
+        if(checkmate(_mode,board,ex_p,QPoint(x+1,y))){
             pack.destX      = x+1    ;
             pack.destY      = y      ;
             _list->push(pack);
@@ -610,7 +610,7 @@ void board::king(int x, int y,safelist<chess_pack> *_list,int _mode,char board[8
         }
     }
     if(board[x-1][y]   EQ piece_list[chess_pieces::Empty] && x-1 BG 0){
-        if(checkmate(mode::black,board,ex_p,QPoint(x-1,y))){
+        if(checkmate(_mode,board,ex_p,QPoint(x-1,y))){
             pack.destX      = x-1    ;
             pack.destY      = y      ;
             _list->push(pack);
@@ -626,7 +626,7 @@ void board::king(int x, int y,safelist<chess_pack> *_list,int _mode,char board[8
         }
     }
     if(board[x+1][y+1] EQ piece_list[chess_pieces::Empty] && x+1 SM 7 && y+1 SM 7){
-        if(checkmate(mode::black,board,ex_p,QPoint(x+1,y+1))){
+        if(checkmate(_mode,board,ex_p,QPoint(x+1,y+1))){
             pack.destX      = x+1    ;
             pack.destY      = y+1    ;
             _list->push(pack);
@@ -642,7 +642,7 @@ void board::king(int x, int y,safelist<chess_pack> *_list,int _mode,char board[8
         }
     }
     if(board[x+1][y-1] EQ piece_list[chess_pieces::Empty] && x+1 SM 7 && y-1 BG 0){
-        if(checkmate(mode::black,board,ex_p,QPoint(x+1,y-1))){
+        if(checkmate(_mode,board,ex_p,QPoint(x+1,y-1))){
             pack.destX      = x+1    ;
             pack.destY      = y-1    ;
             _list->push(pack);
@@ -658,7 +658,7 @@ void board::king(int x, int y,safelist<chess_pack> *_list,int _mode,char board[8
         }
     }
     if(board[x][y+1]   EQ piece_list[chess_pieces::Empty] && y+1 SM 7){
-        if(checkmate(mode::black,board,ex_p,QPoint(x,y+1))){
+        if(checkmate(_mode,board,ex_p,QPoint(x,y+1))){
             pack.destX      = x      ;
             pack.destY      = y+1    ;
             _list->push(pack);
@@ -674,7 +674,7 @@ void board::king(int x, int y,safelist<chess_pack> *_list,int _mode,char board[8
         }
     }
     if(board[x][y-1]   EQ piece_list[chess_pieces::Empty] && y-1 BG 0){
-        if(checkmate(mode::black,board,ex_p,QPoint(x,y-1))){
+        if(checkmate(_mode,board,ex_p,QPoint(x,y-1))){
             pack.destX      = x      ;
             pack.destY      = y-1    ;
             _list->push(pack);
@@ -690,7 +690,7 @@ void board::king(int x, int y,safelist<chess_pack> *_list,int _mode,char board[8
         }
     }
     if(board[x-1][y+1] EQ piece_list[chess_pieces::Empty] && x-1 BG 0 && y+1 SM 7){
-        if(checkmate(mode::black,board,ex_p,QPoint(x-1,y+1))){
+        if(checkmate(_mode,board,ex_p,QPoint(x-1,y+1))){
             pack.destX      = x-1    ;
             pack.destY      = y+1    ;
             _list->push(pack);
@@ -706,7 +706,7 @@ void board::king(int x, int y,safelist<chess_pack> *_list,int _mode,char board[8
         }
     }
     if(board[x-1][y-1] EQ piece_list[chess_pieces::Empty] && x-1 BG 0 && y-1 BG 0){
-        if(checkmate(mode::black,board,ex_p,QPoint(x-1,y-1))){
+        if(checkmate(_mode,board,ex_p,QPoint(x-1,y-1))){
             pack.destX      = x-1    ;
             pack.destY      = y-1    ;
             _list->push(pack);
