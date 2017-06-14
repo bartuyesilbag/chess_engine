@@ -32,12 +32,24 @@ void moveGenerator::findLegalBlackMoves()
     int v1 = rand() % 2;
     QPoint ex_p,new_p;
     if(turn EQ 0){
-        ex_p  = QPoint(1,4);
-        new_p = QPoint(3,4);
+        if(v1 EQ 0){
+            ex_p  = QPoint(1,4);
+            new_p = QPoint(3,4);
+        }
+        else{
+            ex_p  = QPoint(0,6);
+            new_p = QPoint(2,5);
+        }
     }
     else if(turn EQ 1){
-        ex_p  = QPoint(0,1);
-        new_p = QPoint(2,2);
+        if(v1 EQ 0){
+            ex_p  = QPoint(0,1);
+            new_p = QPoint(2,2);
+        }
+        else{
+            ex_p  = QPoint(1,3);
+            new_p = QPoint(3,3);
+        }
     }
     else if (turn EQ 2) {
         if(b->chessBoard[4][2] EQ 'b'){
